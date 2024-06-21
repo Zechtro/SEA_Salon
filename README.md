@@ -1,7 +1,5 @@
-# Tugas Kecil 1 IF 2211 Strategi Algoritma
-> Steven Tjhia - 13522103
->
-> Penyelesaian Cyberpunk 2077 Breach Protocol dengan Algoritma Brute Force
+# SEA Salon
+> Website of SEA Salon.
 
 
 ## Table of Contents
@@ -13,108 +11,67 @@
 * [Usage](#usage)
 * [Project Status](#project-status)
 * [Room for Improvement](#room-for-improvement)
+* [Contributor](#contributor)
 
 
 ## General Information
-- BLABLA.
+- This project is made to fulfill Compfest 16 Software Engineering Academy submission.
 
 
 ## Technologies Used
-- Python - version 3.11.0 --- Certainly not python
-
+- Remix -version 2.9.2
+- React -version 18.2.0
+- Swiper -version 11.1.4
+- Tailwind CSS -version 3.4.4
+- Typescript -version 5.1.6
+- Vite -version 5.1.0
+- Node -version 21.6.2
 
 ## Features
-- Feature 1
-- Feature 2
-- Feature 3
+- Home Page
 
 
-## GUI Screenshots
-![Example screenshot](./src/assets/img/GUI_file.jpg)
+## Screenshots
+Desktop
+![Example screenshot](./Screenshots/Level1-HomePage-Desktop.png)
 
-![Example screenshot](./src/assets/img/GUI_manual.jpg)
+Mobile
+![Example screenshot](./Screenshots/Level1-HomePage-Mobile.png)
 
 
 ## Setup
 
-### Windows
+These steps assume that you have installed Node.js already
 
-#### CLI
+1. From SEA_Salon, navigate to "app" directory.
 
-1. From Tucil1_13522103 directory, navigate to "src" directory
+    `cd src/app`
 
-    `cd src`
+2. Install dependencies.
 
-2. Run Main.py program
+    `npm install`
 
-    `python Main.py`
+3. Run program.
 
-#### GUI
+    `npm run dev`
 
-1. From Tucil1_13522103 directory, navigate to "src" directory
-
-    `cd src`
-
-2. Install flet
-
-    `pip install flet`
-
-3. Run app.py program
-
-    `python app.py`
-    
-### Linux / WSL
-
-#### CLI
-
-1. From Tucil1_13522103 directory, navigate to "src" directory
-
-    `cd src`
-
-2. Run Main.py program
-
-    `python3 Main.py`
-
-#### GUI
-
-1. From Tucil1_13522103 directory, navigate to "src" directory
-
-    `cd src`
-
-2. Install flet
-
-    `pip install flet`
-
-3. Install GStreamer
-
-    `sudo apt install libgtk-3-0`
-
-    `sudo apt-get install gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav`
-
-    `sudo apt-get update`
-
-    `sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio`
-
-4. Run app.py program
-
-    `python3 app.py`
-
+4. Navigate to the localhost shown.
 
 
 ## Usage
-1. Step 1
-2. Step 2
-3. Step 3
+1. See general information and services.
 
 
 ## Project Status
-Project is: _complete_.
+Project is: _on-progress_.
 
 
 ## Room for Improvement
-- Improvement 1
-- Improvement 2
-- Improvement 3
+- Scrollreveal
+
+
+## Contributor
+> Steven Tjhia 
 
 
 ## Licenses
