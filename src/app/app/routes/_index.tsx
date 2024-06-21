@@ -4,7 +4,9 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
-import { Navigation, Pagination } from 'swiper/modules'; 
+import { Navigation, Pagination } from 'swiper/modules';
+import { FaStar } from "react-icons/fa"
+import { useState } from "react";
 
 interface Service {
   image_url: string;
@@ -29,9 +31,19 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+
+
 export default function Index() {
   const { services } = useLoaderData<typeof loader>();
-  
+  const [rating, setRating] = useState(0);
+
+  const handleClick = (index: number) => {
+    if (index === rating) {
+      setRating(0);
+    } else {
+      setRating(index);  
+    }
+  };
 
   return (
     <div className="font-sans">
@@ -49,7 +61,7 @@ export default function Index() {
       <br></br>
 
       {/* SERVICES SECTION */}
-      <section className="mt-[20px] xl:mt-[20px] z-20 pl-4 pr-4">
+      <section className="mt-[20px] z-20 pl-4 pr-4">
         <h2 className="h2 flex justify-center">Our Services</h2>
         <Swiper
           spaceBetween={0}
@@ -88,6 +100,29 @@ export default function Index() {
           ))}
           
         </Swiper>
+      </section>
+
+      {/* REVIEW LIST SECTION */}
+      <section>
+
+      </section>
+
+      {/* REVIEW FORM SECTION */}
+      <section>
+        <h2 className="h2 flex justify-center mt-[3vh]">Review Us!</h2>
+        <div className="flex mt-[5vh] w-full justify-center">
+          <div className="flex w-[40vw] justify-around">
+            {[...Array(5)].map((_, index) => (
+              <FaStar
+              key={index}
+              size={70}
+              color={index < (rating) ? 'gold' : 'lightgray'}
+              onClick={() => handleClick(index + 1)}
+              style={{ cursor: 'pointer' }}
+              />
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* FOOTER */}
