@@ -34,7 +34,9 @@ export default function Index() {
   
 
   return (
-    <div className="font-sans p-4">
+    <div className="font-sans">
+
+      {/* HERO SECTION */}
       <section className="hero h-[640px] xl:h-[840px] bg-hero sm:bg-bottom lg:bg-center lg:bg-cover bg-no-repeat bg-fixed sm:rounded-bl-[150px]  xl:rounded-bl-[290px] relative z-20">
         <div className="container mx-auto h-full flex items-center justify-center xl:justify-start">
           <div className="hero__text w-[567px] flex flex-col items-center text-center xl:text-left lg:items-start">
@@ -46,7 +48,8 @@ export default function Index() {
 
       <br></br>
 
-      <section className="mt-[20px] xl:mt-[20px] z-20">
+      {/* SERVICES SECTION */}
+      <section className="mt-[20px] xl:mt-[20px] z-20 pl-4 pr-4">
         <h2 className="h2 flex justify-center">Our Services</h2>
         <Swiper
           spaceBetween={0}
@@ -87,13 +90,26 @@ export default function Index() {
         </Swiper>
       </section>
 
-      <br></br>
+      {/* FOOTER */}
+      <footer className="pt-[5vh] pb-[5vh] bg-accent mt-[10vh] relative z-20">
+        <div className="container mx-auto px-0 flex flex-col items-center justify-center">
+          <div className="flex flex-col xl:flex-row justify-around items-center w-full">
+            <div className="flex flex-col justify-around xl:justify-start items-center xl:items-start">
+              <h2 className="h2">{SalonName}</h2>
+              <p>{SalonSlogan}</p>
+              <br></br>
+            </div>
+            <div className="flex flex-col justify-around xl:justify-start items-center xl:items-start">
+              <h3 className="h3">Contact Information</h3>
+              <p>{Contact1Name} : {Contact1Number}</p>
+              <p>{Contact2Name} : {Contact2Number}</p>
+            </div>
+          </div>
+          <br></br>
+          <p>Copyright &copy; SEA Salon 2024. All rights reserved.</p>
+        </div>
+      </footer>
 
-      <address>
-        <h5 className="text-2xl">Contact</h5>
-        <p>{Contact1Name} : {Contact1Number}</p>
-        <p>{Contact2Name} : {Contact2Number}</p>
-      </address>
     </div>
   );
 }
