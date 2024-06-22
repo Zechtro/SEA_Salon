@@ -63,8 +63,6 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-
-
 export default function Index() {
   const { services, reviews } = useLoaderData<{ services: Service[], reviews: Review[] }>();
   const [rating, setRating] = useState(0);
