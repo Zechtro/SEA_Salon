@@ -176,7 +176,7 @@ export default function Index() {
                       </div>
                     </div>
                   </div>
-                  <p className="overflow-y-auto h-[20vh] text-justify break-before-avoid">
+                  <p className="overflow-y-auto h-[20vh] break-all">
                     {review.comment}
                   </p>
                 </div>
@@ -240,7 +240,6 @@ export default function Index() {
           <p className="mt-[10vh] text-[2vh]">Copyright &copy; SEA Salon 2024. All rights reserved.</p>
         </div>
       </footer>
-
     </div>
-  );
+  )
 }
