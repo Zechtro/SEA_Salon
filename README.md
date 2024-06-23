@@ -29,6 +29,7 @@
 
 ## Features
 - Home Page
+- Review Form
 
 
 ## Screenshots
@@ -60,6 +61,8 @@ These steps assume that you have installed Node.js already
 
 ## Usage
 1. See general information and services.
+2. See reviews.
+3. Add review(s).
 
 
 ## Project Status

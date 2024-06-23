@@ -176,7 +176,7 @@ export default function Index() {
                       </div>
                     </div>
                   </div>
-                  <p className="break-all overflow-y-auto h-[20vh]">
+                  <p className="overflow-y-auto h-[20vh] text-justify break-before-avoid">
                     {review.comment}
                   </p>
                 </div>
