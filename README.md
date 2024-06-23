@@ -26,6 +26,7 @@
 - Typescript -version 5.1.6
 - Vite -version 5.1.0
 - Node -version 21.6.2
+- dotenv - version 16.4.5
 
 ## Features
 - Home Page
