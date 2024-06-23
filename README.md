@@ -29,14 +29,18 @@
 
 ## Features
 - Home Page
+- Review Form
 
 
 ## Screenshots
+
 Desktop
-![Example screenshot](./Screenshots/Level1-HomePage-Desktop.png)
+
+![Example screenshot](./Screenshots/Level2-HomePage-Desktop.png)
 
 Mobile
-![Example screenshot](./Screenshots/Level1-HomePage-Mobile.png)
+
+![Example screenshot](./Screenshots/Level2-HomePage-Mobile.png)
 
 
 ## Setup
@@ -60,6 +64,8 @@ These steps assume that you have installed Node.js already
 
 ## Usage
 1. See general information and services.
+2. See reviews.
+3. Add review(s).
 
 
 ## Project Status
