@@ -33,11 +33,14 @@
 
 
 ## Screenshots
+
 Desktop
-![Example screenshot](./Screenshots/Level1-HomePage-Desktop.png)
+
+![Example screenshot](./Screenshots/Level2-HomePage-Desktop.png)
 
 Mobile
-![Example screenshot](./Screenshots/Level1-HomePage-Mobile.png)
+
+![Example screenshot](./Screenshots/Level2-HomePage-Mobile.png)
 
 
 ## Setup
