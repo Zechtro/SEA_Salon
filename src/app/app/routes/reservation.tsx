@@ -95,9 +95,9 @@ export default function Reservation() {
   return (
     <div className="font-sans flex flex-col items-center">
       <h1 className="h1 mt-[5vh]">Reservation</h1>
-      <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[50vw] h-[60vh] rounded-lg border-4 border-accent">
-        <div className="flex justify-around">
-          <label htmlFor="name" className="w-[15vw] text-[3vh]">Name</label>
+      <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[50vw] sm:h-[70vh] lg:h-[60vh] rounded-lg border-4 border-accent">
+        <div className="flex sm:flex-col lg:flex-row justify-around">
+          <label htmlFor="name" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Name</label>
            <div className="w-[30vw]">
             <input
               name="name"
@@ -113,8 +113,8 @@ export default function Reservation() {
             )}
           </div> 
         </div>
-        <div className="flex justify-around">
-          <label htmlFor="phone_number" className="w-[15vw] text-[3vh]">Phone Number</label>
+        <div className="flex sm:flex-col lg:flex-row justify-around">
+          <label htmlFor="phone_number" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Phone Number</label>
           <div className="w-[30vw]"> 
             <input
               name="phone_number"
@@ -131,12 +131,12 @@ export default function Reservation() {
             )}
           </div>
         </div>
-        <div className="flex justify-around">
-          <label htmlFor="service" className="w-[15vw] text-[3vh]">Service</label>
+        <div className="flex sm:flex-col lg:flex-row justify-around">
+          <label htmlFor="service" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Service</label>
           <select
             name="service"
             required
-            className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent"
+            className="sm:w-[35vw] lg:w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent"
           >
             <option value="">Choose Service</option>
             {dropDownServices.map((option: dropDownEntry) => (
@@ -146,8 +146,8 @@ export default function Reservation() {
             ))}
           </select>
         </div>
-        <div className="flex justify-around">
-          <label htmlFor="datetime" className="w-[15vw] text-[3vh]">Date and Time</label>
+        <div className="flex sm:flex-col lg:flex-row justify-around">
+          <label htmlFor="datetime" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Date and Time</label>
           <div className="w-[30vw]"> 
             <input
               name="datetime"
