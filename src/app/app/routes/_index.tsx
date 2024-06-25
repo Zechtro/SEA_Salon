@@ -9,19 +9,16 @@ import { FaStar } from "react-icons/fa"
 import { useState } from "react";
 import { Form } from "@remix-run/react";
 import { Button } from "../components/ButtonFormReview";
+import { Review, createReview } from "../models/reviews";
+import {  Table_Review } from "../utils/db.server";
+import { addReview } from "..//utils/review.server";
 
 interface Service {
   image_url: string;
   service_name: string;
 }
 
-interface Review {
-  nama_user: string;
-  rating: number;
-  comment: string;
-}
-
-const reviews: Review[] = [
+const reviewsDummy: Review[] = [
   {nama_user: "UserDummy1", rating: 5, comment: "GG BANG"},
   {nama_user: "UserDummy2", rating: 3, comment: "GACORRRRR"},
   {nama_user: "UserDummy3", rating: 1, comment: "HAHHHH ??!?!?! JADI DUTA SALON LAIN?!?!?! EHEHAHAHAH"},
@@ -32,6 +29,7 @@ const reviews: Review[] = [
   {nama_user: "UserDummy8", rating: 5, comment: "GG BANG"},
 ];
 
+
 export const loader: LoaderFunction = async () => {
   const services: Service[] = [
     {image_url: Service1_img, service_name: Service1},
@@ -41,6 +39,15 @@ export const loader: LoaderFunction = async () => {
     {image_url: Service5_img, service_name: Service5},
   ];
 
+  const reviewsDocs = await Table_Review.get()
+  const reviewsFirebase: Review[] = reviewsDocs.docs.map(doc => ({
+    nama_user: doc.data().nama_user,
+    rating: doc.data().rating,
+    comment: doc.data().comment,
+  }));
+
+  const reviews: Review[] = [...reviewsDummy,...reviewsFirebase]
+  
   return json({ services, reviews });
 }
 
@@ -51,8 +58,11 @@ export async function action({ request }: ActionFunctionArgs) {
     const comment: string = formData.get("comment") as string;
     console.log(formData.get("rating"));
     console.log(formData.get("comment"));
-    reviews.push({nama_user: "UserX", rating: rating, comment: comment});
+
+    const review: Review = createReview('UserDummy',rating, comment)
+    await addReview(review)
   }
+  
   return null;
 }
 
@@ -158,7 +168,7 @@ export default function Index() {
           }}
           className="w-[90vw] h-[48vh]"
         >
-          {reviews.map((review: Review) => (
+          {reviews && reviews.map((review: Review) => (
             <SwiperSlide key={review.nama_user} className="flex flex-row justify-around items-center">
               <div className="flex justify-center items-center sm:w-[70vw] xl:w-[40vw] 2xl:w-[25vw] h-[40vh] bg-white rounded-xl border-[0.2vw] border-accent">
                 <div className="flex flex-col justify-around items-start sm:w-[65vw]  xl:w-[35vw] 2xl:w-[20vw] h-[35vh]">
@@ -183,7 +193,6 @@ export default function Index() {
               </div>
             </SwiperSlide>
           ))}
-          
         </Swiper>
       </section>
 

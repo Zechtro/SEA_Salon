@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
 import { initializeApp, getApps } from 'firebase/app';
 // import { getAnalytics } from 'firebase/analytics';
-import { CollectionReference, DocumentData, getFirestore } from 'firebase-admin/firestore';
+import admin from "firebase-admin";
+import { CollectionReference, DocumentData } from 'firebase-admin/firestore';
 import { applicationDefault, initializeApp as initializeAdminApp, } from 'firebase-admin/app'; 
 import { ReservasiLayanan } from '../models/reservasi';
 import { Review } from '../models/reviews';
@@ -25,7 +26,7 @@ if (!getApps().length) {
     });
   }
   
-export const db = getFirestore();
+export const db = admin.firestore();
 // const adminAuth = admin.auth();
 
 // let app;

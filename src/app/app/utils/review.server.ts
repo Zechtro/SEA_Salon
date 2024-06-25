@@ -1,26 +1,15 @@
 // BARU CONTOH YA INI
 // utils/firestore.server.ts 
-import { firestore } from "firebase-admin";
-import { db } from './db.server';
+import { db, Table_Review } from "./db.server";
+import { Review } from "../models/reviews";
 
-interface ReviewData {
-  nama_user: string;
-  rating: number;
-  comment: string;
-  date: Date; // Add a timestamp to track when the review was created
-}
-
-export async function addReview(reviewData: ReviewData): Promise<string | null> {
+export async function addReview(reviewData: Review): Promise<string | null> {
   try {
-    const reviewRef = doc(db, "reviews", reviewData.nama_user);
+    const reviewRef = db.doc(`${Table_Review.path}/${reviewData.nama_user}`);
 
     // Ensure the user doesn't already have a review
-    const docSnap = await reviewRef.get();
-    if (docSnap.exists()) {
-      throw new Error(`Review for user ${reviewData.nama_user} already exists.`);
-    }
 
-    await setDoc(reviewRef, reviewData);
+    await reviewRef.set(reviewData);
     console.log("Review added with ID:", reviewData.nama_user);
     return reviewData.nama_user; // Return the document ID (nama_user) on success
   } catch (error) {
