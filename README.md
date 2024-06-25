@@ -26,21 +26,43 @@
 - Typescript -version 5.1.6
 - Vite -version 5.1.0
 - Node -version 21.6.2
+- dotenv - version 16.4.5
+- firebase -version 10.12.2
+- firebase-admin -version 12.2.0
 
 ## Features
 - Home Page
+- Reviews sorted by rating
 - Review Form
+- Reservation Page
+- Reservation Form
 
 
 ## Screenshots
 
-Desktop
+### Desktop - Home Page
 
-![Example screenshot](./Screenshots/Level2-HomePage-Desktop.png)
+![Example screenshot](./Screenshots/Level3-HomePage-Desktop.png)
 
-Mobile
+### Desktop - Reservation
 
-![Example screenshot](./Screenshots/Level2-HomePage-Mobile.png)
+![Example screenshot](./Screenshots/Level3-Reservation-Desktop.png)
+
+### Mobile - Home Page
+
+![Example screenshot](./Screenshots/Level3-HomePage-Mobile.png)
+
+### Mobile - Reservation
+
+![Example screenshot](./Screenshots/Level3-Reservation-Mobile.png)
+
+### Firebase - Reservation
+
+![Example screenshot](./Screenshots/Level3-Firebase-Reservation.jpg)
+
+### Firebase - Reviews
+
+![Example screenshot](./Screenshots/Level3-Firebase-Reviews.jpg)
 
 
 ## Setup
@@ -65,7 +87,8 @@ These steps assume that you have installed Node.js already
 ## Usage
 1. See general information and services.
 2. See reviews.
-3. Add review(s).
+3. Add/update review.
+4. Add Reservation(s).
 
 
 ## Project Status
@@ -74,6 +97,7 @@ Project is: _on-progress_.
 
 ## Room for Improvement
 - Scrollreveal
+- On Success form submit notification
 
 
 ## Contributor

@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
-import { SalonSlogan, Contact1Name, Contact1Number, Contact2Name, Contact2Number, Service1, Service2, Service3, Service4, Service5, Service1_img , Service2_img, Service3_img, Service4_img, Service5_img, SalonName } from "../components/SalonStaticVar";
+import { SalonSlogan, Service1, Service2, Service3, Service4, Service5, Service1_img , Service2_img, Service3_img, Service4_img, Service5_img, SalonName } from "../components/SalonStaticVar";
 import type { LoaderFunction } from "@remix-run/node";
-import { json, useLoaderData } from "@remix-run/react";
+import { json, useActionData, useLoaderData } from "@remix-run/react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import { Navigation, Pagination } from 'swiper/modules';
@@ -9,28 +9,26 @@ import { FaStar } from "react-icons/fa"
 import { useState } from "react";
 import { Form } from "@remix-run/react";
 import { Button } from "../components/ButtonFormReview";
+import { Review, createReview } from "../models/reviews";
+import {  Table_Review } from "../utils/db.server";
+import { addReview } from "../utils/review.server";
 
 interface Service {
   image_url: string;
   service_name: string;
 }
 
-interface Review {
-  nama_user: string;
-  rating: number;
-  comment: string;
+interface error {
+  invalidComment?: string
 }
 
-const reviews: Review[] = [
+const reviewsDummy: Review[] = [
+  {nama_user: "UserDummy4", rating: 2, comment: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXX"},
   {nama_user: "UserDummy1", rating: 5, comment: "GG BANG"},
-  {nama_user: "UserDummy2", rating: 3, comment: "GACORRRRR"},
-  {nama_user: "UserDummy3", rating: 1, comment: "HAHHHH ??!?!?! JADI DUTA SALON LAIN?!?!?! EHEHAHAHAH"},
-  {nama_user: "UserDummy4", rating: 2, comment: "Rill khhh"},
-  {nama_user: "UserDummy5", rating: 4, comment: "Seriusss??"},
-  {nama_user: "UserDummy6", rating: 5, comment: "Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah"},
-  {nama_user: "UserDummy7", rating: 1, comment: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXX"},
-  {nama_user: "UserDummy8", rating: 5, comment: "GG BANG"},
+  {nama_user: "UserDummy2", rating: 4, comment: "HAHHHH ??!?!?! JADI DUTA SALON LAIN?!?!?! EHEHAHAHAH"},
+  {nama_user: "UserDummy3", rating: 3, comment: "Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah Isshhh panjang kali lah"},
 ];
+
 
 export const loader: LoaderFunction = async () => {
   const services: Service[] = [
@@ -41,31 +39,58 @@ export const loader: LoaderFunction = async () => {
     {image_url: Service5_img, service_name: Service5},
   ];
 
+  let reviews: Review[]
+  try{
+    const reviewsDocs = await Table_Review.get()
+    const reviewsFirebase: Review[] = reviewsDocs.docs.map(doc => ({
+      nama_user: doc.data().nama_user,
+      rating: doc.data().rating,
+      comment: doc.data().comment,
+    }));
+
+    reviews = [...reviewsDummy,...reviewsFirebase]
+    reviews.sort((a, b) => b.rating - a.rating)
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    reviews = []
+  }
+
   return json({ services, reviews });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  if(formData.get("rating") !== null && !formData.get("comment") !== null){
-    const rating: number = parseInt(formData.get("rating") as string);
-    const comment: string = formData.get("comment") as string;
-    console.log(formData.get("rating"));
-    console.log(formData.get("comment"));
-    reviews.push({nama_user: "UserX", rating: rating, comment: comment});
+
+  const error: error = {}
+
+  const rating: number = parseInt(formData.get("rating") as string);
+  const comment: string = (formData.get("comment") as string).trim();
+  console.log(formData.get("rating"));
+  console.log(formData.get("comment"));
+  if (comment.length === 0){
+    error.invalidComment = "Blank comment"
+  } else {
+    const review: Review = createReview('UserDummy',rating, comment)
+    await addReview(review)
   }
-  return null;
+  
+  return {
+    error: comment.length === 0 ? error : null
+  };
 }
 
 export const meta: MetaFunction = () => {
   return [
-    { title: {SalonName} },
-    { name: "description", content: {SalonSlogan} },
+    { title: SalonName },
+    { name: "description", content: SalonSlogan },
   ];
 };
 
 export default function Index() {
   const { services, reviews } = useLoaderData<{ services: Service[], reviews: Review[] }>();
   const [rating, setRating] = useState(0);
+  const actionData = useActionData<typeof action>()
+  const invalidComment = actionData?.error?.invalidComment
 
   const handleClick = (index: number) => {
     if (index === rating) {
@@ -158,7 +183,7 @@ export default function Index() {
           }}
           className="w-[90vw] h-[48vh]"
         >
-          {reviews.map((review: Review) => (
+          {reviews && reviews.map((review: Review) => (
             <SwiperSlide key={review.nama_user} className="flex flex-row justify-around items-center">
               <div className="flex justify-center items-center sm:w-[70vw] xl:w-[40vw] 2xl:w-[25vw] h-[40vh] bg-white rounded-xl border-[0.2vw] border-accent">
                 <div className="flex flex-col justify-around items-start sm:w-[65vw]  xl:w-[35vw] 2xl:w-[20vw] h-[35vh]">
@@ -183,7 +208,6 @@ export default function Index() {
               </div>
             </SwiperSlide>
           ))}
-          
         </Swiper>
       </section>
 
@@ -206,7 +230,7 @@ export default function Index() {
             <input name="rating" type="number" hidden value={rating} />
           </div>
 
-          <div className="mt-[3vh] flex justify-center">
+          <div className="mt-[3vh] flex flex-col items-center justify-center">
             <textarea
                 name="comment"
                 rows={4}
@@ -214,6 +238,11 @@ export default function Index() {
                 className="resize-none flex items-start sm:w-[70vw] lg:w-[50%] border-[0.2vw] border-accent rounded-[1vw] p-4 h-[45vh]"
                 required
             ></textarea>
+            {invalidComment && (
+              <span className="text-red-500 h-[2vh] text-[2vh] sm:w-[70vw] lg:w-[50%]">
+                {invalidComment}
+              </span>
+            )}
           </div>
 
           <div className="flex w-full justify-center mt-[3vh]">
@@ -221,25 +250,6 @@ export default function Index() {
           </div>
         </Form >
       </section>
-
-      {/* FOOTER */}
-      <footer className="pt-[5vh] pb-[5vh] bg-accent mt-[10vh] relative z-20">
-        <div className="container mx-auto px-0 flex flex-col items-center justify-between">
-          <div className="flex flex-col xl:flex-row justify-around items-center w-full">
-            <div className="flex flex-col justify-around xl:justify-start items-center xl:items-start">
-              <h2 className="h2">{SalonName}</h2>
-              <p><em>{SalonSlogan}</em></p>
-              <br></br>
-            </div>
-            <div className="flex flex-col justify-around xl:justify-start items-center xl:items-start">
-              <h3 className="h3">Contact Information</h3>
-              <p>{Contact1Name} : {Contact1Number}</p>
-              <p>{Contact2Name} : {Contact2Number}</p>
-            </div>
-          </div>
-          <p className="mt-[10vh] text-[2vh]">Copyright &copy; SEA Salon 2024. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   )
 }
