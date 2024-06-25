@@ -40,13 +40,21 @@
 
 ## Screenshots
 
-Desktop
+Desktop - Home Page
 
-![Example screenshot](./Screenshots/Level2-HomePage-Desktop.png)
+![Example screenshot](./Screenshots/Level3-HomePage-Desktop.png)
 
-Mobile
+Desktop - Reservation
 
-![Example screenshot](./Screenshots/Level2-HomePage-Mobile.png)
+![Example screenshot](./Screenshots/Level3-Reservation-Desktop.png)
+
+Mobile - Home Page
+
+![Example screenshot](./Screenshots/Level3-HomePage-Mobile.png)
+
+Mobile - Reservation
+
+![Example screenshot](./Screenshots/Level3-Reservation-Mobile.png)
 
 
 ## Setup
