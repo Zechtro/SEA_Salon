@@ -27,10 +27,15 @@
 - Vite -version 5.1.0
 - Node -version 21.6.2
 - dotenv - version 16.4.5
+- firebase -version 10.12.2
+- firebase-admin -version 12.2.0
 
 ## Features
 - Home Page
+- Reviews sorted by rating
 - Review Form
+- Reservation Page
+- Reservation Form
 
 
 ## Screenshots
@@ -66,7 +71,8 @@ These steps assume that you have installed Node.js already
 ## Usage
 1. See general information and services.
 2. See reviews.
-3. Add review(s).
+3. Add/update review.
+4. Add Reservation(s).
 
 
 ## Project Status
