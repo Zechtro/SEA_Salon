@@ -8,6 +8,7 @@ import {
 import type { LinksFunction } from "@remix-run/node";
 import styles from "./tailwind.css?url";
 import MainHeader from "./components/MainHeader";
+import MainFooter from "./components/MainFooter";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,10 +21,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className="bg-gray-100">
         <MainHeader />
-        <main className="max-w-[1920px] mx-auto bg-white overflow-hidden">
+        <main className="max-w-[1920px] mx-auto pb-[10vh] bg-white overflow-hidden">
           {children}
         </main>
-        <ScrollRestoration />
+        <MainFooter />
+        <ScrollRestoration getKey={(location) => {
+          return location.pathname
+        }} />
         <Scripts />
         <script defer src="./scripts/scrollreveal.min.js"></script>
       </body>
