@@ -27,9 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Signup() {
-    const invalidFullname = null
     const invalidEmail = null
-    const invalidPhonenumber = null
     const invalidPassword = null
 
     return (
