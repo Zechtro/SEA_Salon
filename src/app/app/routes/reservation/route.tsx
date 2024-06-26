@@ -1,21 +1,12 @@
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Service1, Service2, Service3, Service4, Service5} from "../components/SalonStaticVar";
+import { Service1, Service2, Service3, Service4, Service5} from "../../components/SalonStaticVar";
 import type { LoaderFunction } from "@remix-run/node";
 import { json, useLoaderData, Form, useActionData } from "@remix-run/react";
-import { Button } from "../components/ButtonFormReview";
-import { ReservationEntry, createReservation } from "../models/reservation";
-import { addReservation } from "../utils/reservation.server";
-
-interface dropDownEntry {
-  label: string,
-  value: string
-}
-
-interface error {
-  invalidName?: string,
-  invalidPhoneNumber?: string,
-  invalidDatetime?: string,
-}
+import { Button } from "../../components/ButtonFormReview";
+import { ReservationEntry, createReservation } from "../../models/reservation";
+import { addReservation } from "../../utils/reservation.server";
+import { dropDownEntry } from "./interface";
+import { validate } from "./validate";
 
 export const loader: LoaderFunction = async () => {
   const dropDownServices : dropDownEntry[] = [
@@ -26,56 +17,25 @@ export const loader: LoaderFunction = async () => {
     {label: Service5, value: Service5},
   ];
 
-
-
   return json({ dropDownServices });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
-  const error: error = {}
-
   const datetimestring : string = formData.get("datetime") as string;
-  const datetime : Date = new Date(datetimestring)
-  if(datetime < new Date()){
-    error.invalidDatetime="We can't time travel"
-  } else if(datetime.getHours() < 9 || datetime.getHours() > 21){
-    error.invalidDatetime="We only open from 09.00 AM - 09.00 PM"
-  }
-  const year = datetime.getFullYear();
-  const month = datetime.getMonth() + 1;
-  const day = datetime.getDate();
-
   const name: string = (formData.get("name") as string).trim();
-  if (name.length === 0){
-    error.invalidName = "Invalid name"
-  } else if (name.length < 4){
-    error.invalidName = "At least 4 characters"
-  }
   const service: string = formData.get("service") as string;
-  const phone_number: string = formData.get("phone_number") as string;
-  if(phone_number.length < 8){
-    error.invalidPhoneNumber = "At least 8 number"
-  }
-  const date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-  const time = `${datetime.getHours()}:${datetime.getMinutes()}`;
+  const phone_number: string = formData.get("phone_number") as string;  
 
-  console.log(name);
-  console.log(phone_number);
-  console.log(service);
-  console.log(datetimestring);
-  console.log(date);
-  console.log(time);
+  const error = validate(name,phone_number,service,datetimestring)
 
-  if(!Object.keys(error).length){
+  if(!error){
     const reservation: ReservationEntry = createReservation(name,phone_number,service,datetimestring)
     await addReservation(reservation)
   }
   
-  return {
-    error: Object.keys(error).length ? error : null
-  }
+  return { error }
 }
 
 export const meta: MetaFunction = () => {
