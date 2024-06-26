@@ -62,7 +62,7 @@ export default function Reservation() {
             <input
               name="name"
               type="text"
-              placeholder="Full Name"
+              placeholder="John Doe"
               required
               className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
             />
