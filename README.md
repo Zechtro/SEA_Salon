@@ -36,6 +36,10 @@
 - Review Form
 - Reservation Page
 - Reservation Form
+- Reservation list sorted by latest date
+- User Authentication (Sign Up/Login/Logout)
+- Profile Page
+- Service Form
 
 
 ## Screenshots
@@ -89,6 +93,9 @@ These steps assume that you have installed Node.js already
 2. See reviews.
 3. Add/update review.
 4. Add Reservation(s).
+5. See Reservation(s).
+6. Sign Up/Login/Logout
+7. Add Service(s).
 
 
 ## Project Status
@@ -97,7 +104,7 @@ Project is: _on-progress_.
 
 ## Room for Improvement
 - Scrollreveal
-- On Success form submit notification
+- Reservation list pagination
 
 
 ## Contributor
