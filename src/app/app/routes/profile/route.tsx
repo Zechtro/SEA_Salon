@@ -34,7 +34,7 @@ export default function Profile() {
             <div className="flex sm:flex-col lg:flex-row justify-around">
               <p className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Email</p>
               <div className="w-[30vw]">
-                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2">
+                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2 overflow-x-auto overflow-y-hidden">
                   {email}
                 </p>
               </div> 
@@ -42,7 +42,7 @@ export default function Profile() {
             <div className="flex sm:flex-col lg:flex-row justify-around">
               <p className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Full Name</p>
               <div className="w-[30vw]">
-                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2">
+                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2 overflow-x-auto overflow-y-hidden">
                   {user.full_name}
                 </p>
               </div> 
@@ -50,7 +50,7 @@ export default function Profile() {
             <div className="flex sm:flex-col lg:flex-row justify-around">
               <p className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Phone Number</p>
               <div className="w-[30vw]">
-                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2">
+                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2 overflow-x-auto overflow-y-hidden">
                   {user.phone_number}
                 </p>
               </div> 
@@ -58,7 +58,7 @@ export default function Profile() {
             <div className="flex sm:flex-col lg:flex-row justify-around">
               <p className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Role</p>
               <div className="w-[30vw]">
-                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2">
+                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2 overflow-x-auto overflow-y-hidden">
                   {user.admin ? "Admin" : "Customer"}
                 </p>
               </div> 
