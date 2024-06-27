@@ -1,18 +1,17 @@
-import { Form, json } from "@remix-run/react";
+import { Form, json, useActionData } from "@remix-run/react";
 import { Button } from "../../components/ButtonFormReview";
-import { ActionFunctionArgs, LoaderFunction } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { signUp } from "../../utils/db.server";
+import { createUserSession, getUserSession, signOut } from "../../utils/session.server";
 
-export const loader: LoaderFunction = async () => {
-    const dropDownServices = [
-      {label: "Service1", value: "Service1"},
-      {label: "Service2", value: "Service2"},
-      {label: "Service3", value: "Service3"},
-      {label: "Service4", value: "Service4"},
-      {label: "Service5", value: "Service5"},
-    ];
-  
-    return json({ dropDownServices });
+export async function loader({ request }: LoaderFunctionArgs) {
+  const sessionUser = await getUserSession(request);
+  if(sessionUser){
+    return signOut(request)
   }
+
+  return null
+}
 
 export async function action({ request }: ActionFunctionArgs) {
 
@@ -23,12 +22,31 @@ export async function action({ request }: ActionFunctionArgs) {
     // Password + Hashing
     // Role (Customer/Admin)
 
-    return null
+  const formData = await request.formData();
+
+  const email: string = formData.get("email") as string;
+  const password: string = formData.get("password") as string;
+  try {
+    const { user } = await signUp(email, password);
+    const token = await user.getIdToken();
+    return createUserSession(token, "/reservation");
+  } catch (error) {
+    if (error.code === "auth/email-already-in-use") {
+      return {
+        error: "Email already exists"
+      }
+    } else {
+      return {
+        error: "Invalid email"
+      }
+    }
+  }
 }
 
 export default function Signup() {
+    const actionData = useActionData<typeof action>();
     const invalidFullname = null
-    const invalidEmail = null
+    const invalidEmail = actionData?.error
     const invalidPhonenumber = null
     const invalidPassword = null
 

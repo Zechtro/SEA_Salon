@@ -1,14 +1,19 @@
-import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Service1, Service2, Service3, Service4, Service5} from "../../components/SalonStaticVar";
-import type { LoaderFunction } from "@remix-run/node";
-import { json, useLoaderData, Form, useActionData } from "@remix-run/react";
+import { json, useLoaderData, Form, useActionData, redirect } from "@remix-run/react";
 import { Button } from "../../components/ButtonFormReview";
 import { ReservationEntry, createReservation } from "../../models/reservation";
 import { addReservation } from "../../utils/reservation.server";
 import { dropDownEntry } from "./interface";
 import { validate } from "./validate";
+import { getUserSession } from "../../utils/session.server";
+import { getTableCustomerReservation } from "../../utils/db.server";
 
-export const loader: LoaderFunction = async () => {
+export async function loader({ request }: LoaderFunctionArgs) {
+  const sessionUser = await getUserSession(request);
+  if(!sessionUser){
+    return redirect("/")
+  }
   const dropDownServices : dropDownEntry[] = [
     {label: Service1, value: Service1},
     {label: Service2, value: Service2},
@@ -17,7 +22,20 @@ export const loader: LoaderFunction = async () => {
     {label: Service5, value: Service5},
   ];
 
-  return json({ dropDownServices });
+  let reservations: ReservationEntry[]
+  try{
+    const reservationsDocs = await getTableCustomerReservation(sessionUser.email as string).get()
+    reservations = reservationsDocs.docs.map(doc => ({
+      name: doc.data().name,
+      phone_number: doc.data().phone_number,
+      service: doc.data().service,
+      datetime: doc.data().datetime
+    })).sort((a, b) => b.datetime.localeCompare(a.datetime))
+  } catch (error) {
+    reservations = []
+  }
+
+  return json({ dropDownServices: dropDownServices, recentReservations: reservations });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -32,7 +50,9 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if(!error){
     const reservation: ReservationEntry = createReservation(name,phone_number,service,datetimestring)
-    await addReservation(reservation)
+    const sessionUser = await getUserSession(request);
+    const userEmail: string = sessionUser?.email as string
+    await addReservation(reservation, userEmail)
   }
   
   return { error }
@@ -46,7 +66,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Reservation() {
-  const { dropDownServices} = useLoaderData<{dropDownServices: dropDownEntry[]}>();
+  const {dropDownServices, recentReservations} = useLoaderData<{dropDownServices: dropDownEntry[], recentReservations: ReservationEntry[]}>();
   const actionData = useActionData<typeof action>()
   const invalidName = actionData?.error?.invalidName
   const invalidPhoneNumber = actionData?.error?.invalidPhoneNumber
@@ -55,77 +75,179 @@ export default function Reservation() {
   return (
     <div className="font-sans flex flex-col items-center">
       <h1 className="h1 mt-[5vh]">Reservation</h1>
-      <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[50vw] sm:h-[70vh] lg:h-[60vh] rounded-lg border-4 border-accent">
-        <div className="flex sm:flex-col lg:flex-row justify-around">
-          <label htmlFor="name" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Name</label>
-           <div className="w-[30vw]">
-            <input
-              name="name"
-              type="text"
-              placeholder="John Doe"
+      {/* Reservation Form Section */}
+      <section>
+        <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[50vw] sm:h-[70vh] lg:h-[60vh] rounded-lg border-4 border-accent">
+          <div className="flex sm:flex-col lg:flex-row justify-around">
+            <label htmlFor="name" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Name</label>
+            <div className="w-[30vw]">
+              <input
+                name="name"
+                type="text"
+                placeholder="John Doe"
+                required
+                className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
+              />
+              {invalidName && (
+                <span className="text-red-500 h-[2vh] text-[2vh]">
+                  {invalidName}
+                </span>
+              )}
+            </div> 
+          </div>
+          <div className="flex sm:flex-col lg:flex-row justify-around">
+            <label htmlFor="phone_number" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Phone Number</label>
+            <div className="w-[30vw]"> 
+              <input
+                name="phone_number"
+                type="number"
+                min={0}
+                placeholder="08123456789"
+                required
+                className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
+              />
+              {invalidPhoneNumber && (
+                <span className="text-red-500 h-[2vh] text-[2vh] ">
+                  {invalidPhoneNumber}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="flex sm:flex-col lg:flex-row justify-around">
+            <label htmlFor="service" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Service</label>
+            <select
+              name="service"
               required
-              className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
-            />
-            {invalidName && (
-              <span className="text-red-500 h-[2vh] text-[2vh]">
-                {invalidName}
-              </span>
-            )}
-          </div> 
-        </div>
-        <div className="flex sm:flex-col lg:flex-row justify-around">
-          <label htmlFor="phone_number" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Phone Number</label>
-          <div className="w-[30vw]"> 
-            <input
-              name="phone_number"
-              type="number"
-              min={0}
-              placeholder="08123456789"
-              required
-              className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
-            />
-            {invalidPhoneNumber && (
-              <span className="text-red-500 h-[2vh] text-[2vh] ">
-                {invalidPhoneNumber}
-              </span>
-            )}
+              className="sm:w-[35vw] lg:w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent"
+            >
+              <option value="">Choose Service</option>
+              {dropDownServices.map((option: dropDownEntry) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex sm:flex-col lg:flex-row justify-around">
+            <label htmlFor="datetime" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Date and Time</label>
+            <div className="w-[30vw]"> 
+              <input
+                name="datetime"
+                type="datetime-local"
+                required
+                className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
+              />
+              {invalidDatetime && (
+                <span className="text-red-500 h-[2vh] text-[2vh] ">
+                  {invalidDatetime}
+                </span>
+              )}
+            </div>
+          </div>
+          <Button type="submit">
+            Submit
+          </Button>
+        </Form >
+      </section>
+
+      {/* Recent Reservations List Section */}
+      <section className="flex flex-col items-center mt-[8vh] w-full">
+        <h2 className="h2">Recent Reservations</h2>
+        <div className="flex w-[75vw] flex-col items-center mt-[3vh]">
+          <div className="overflow-auto rounded-lg shadow hidden md:block w-full">
+            <table className="w-full">
+              <thead className="bg-accent border-b-2 border-accent">
+              <tr>
+                <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Name</th>
+                <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Phone Number</th>
+                <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Service</th>
+                <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Date</th>
+                <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Time</th>
+              </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {recentReservations.map((reservation: ReservationEntry) => (
+                <tr key={reservation.datetime} className="bg-gray-100">
+                  <td className="p-3 text-sm text-primary whitespace-nowrap">
+                    <p className="text-[3vh] p-3">{reservation.name}</p>
+                  </td>
+                  <td className="p-3 text-sm text-primary  whitespace-nowrap">
+                    <p className="text-[3vh] p-3">{reservation.phone_number}</p>
+                  </td>
+                  <td className="p-3 text-sm text-primary  whitespace-nowrap">
+                    <p className="text-[3vh] p-3">{reservation.service}</p>
+                  </td>
+                  <td className="p-3 text-sm text-primary  whitespace-nowrap">
+                    <p className="text-[3vh] p-3">{`${(new Date(reservation.datetime)).getFullYear()}/${(new Date(reservation.datetime)).getMonth()}/${(new Date(reservation.datetime)).getDate()}`}</p>
+                  </td>
+                  <td className="p-3 text-sm text-primary  whitespace-nowrap">
+                    <p className="text-[3vh] p-3">{`${(new Date(reservation.datetime)).getHours()}:${(new Date(reservation.datetime)).getMinutes().toString().length === 1 ? `0${(new Date(reservation.datetime)).getMinutes()}` : (new Date(reservation.datetime)).getMinutes()}`}</p>
+                  </td>
+                </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+      
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+            <div className="bg-gray-100 space-y-3 p-4 rounded-lg shadow">
+              <div className="flex items-center space-x-2 text-sm">
+                <div>
+                  <div className="text-blue-500 font-bold hover:underline">#1000</div>
+                </div>
+                <div className="text-gray-500">10/10/2021</div>
+                <div>
+                  <span
+                    className="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Delivered</span>
+                </div>
+              </div>
+              <div className="text-sm text-primary ">
+                Kring New Fit office chair, mesh + PU, black
+              </div>
+              <div className="text-sm font-medium text-black">
+                $200.00
+              </div>
+            </div>
+            <div className="bg-white space-y-3 p-4 rounded-lg shadow">
+              <div className="flex items-center space-x-2 text-sm">
+                <div>
+                  <div className="text-blue-500 font-bold hover:underline">#1001</div>
+                </div>
+                <div className="text-gray-500">10/10/2021</div>
+                <div>
+                  <span
+                    className="p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">Shipped</span>
+                </div>
+              </div>
+              <div className="text-sm text-primary ">
+                Kring New Fit office chair, mesh + PU, black
+              </div>
+              <div className="text-sm font-medium text-black">
+                $200.00
+              </div>
+            </div>
+            <div className="bg-white space-y-3 p-4 rounded-lg shadow">
+              <div className="flex items-center space-x-2 text-sm">
+                <div>
+                  <div className="text-blue-500 font-bold hover:underline">#1002</div>
+                </div>
+                <div className="text-gray-500">10/10/2021</div>
+                <div>
+                  <span
+                    className="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">Canceled</span>
+                </div>
+              </div>
+              <div className="text-sm text-primary ">
+                Kring New Fit office chair, mesh + PU, black
+              </div>
+              <div className="text-sm font-medium text-black">
+                $200.00
+              </div>
+            </div>
           </div>
         </div>
-        <div className="flex sm:flex-col lg:flex-row justify-around">
-          <label htmlFor="service" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Service</label>
-          <select
-            name="service"
-            required
-            className="sm:w-[35vw] lg:w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent"
-          >
-            <option value="">Choose Service</option>
-            {dropDownServices.map((option: dropDownEntry) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex sm:flex-col lg:flex-row justify-around">
-          <label htmlFor="datetime" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Date and Time</label>
-          <div className="w-[30vw]"> 
-            <input
-              name="datetime"
-              type="datetime-local"
-              required
-              className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
-            />
-            {invalidDatetime && (
-              <span className="text-red-500 h-[2vh] text-[2vh] ">
-                {invalidDatetime}
-              </span>
-            )}
-          </div>
-        </div>
-        <Button type="submit">
-          Submit
-        </Button>
-      </Form >
+
+      </section>
     </div>
   )
 }

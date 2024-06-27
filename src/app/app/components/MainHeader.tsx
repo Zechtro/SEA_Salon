@@ -37,6 +37,9 @@ function MainHeader(){
                             <li className="flex justify-center nav-item sm:w-[15vw] lg:w-[8vw]">
                                 <NavLink preventScrollReset to="/login">Login</NavLink>
                             </li>
+                            <li className="flex justify-center nav-item sm:w-[15vw] lg:w-[8vw]">
+                                <NavLink preventScrollReset to="/">Logout</NavLink>
+                            </li>
                         </ul>
                     </nav>
                 </div>

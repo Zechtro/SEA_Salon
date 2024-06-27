@@ -1,25 +1,17 @@
-import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 import { SalonSlogan, Service1, Service2, Service3, Service4, Service5, Service1_img , Service2_img, Service3_img, Service4_img, Service5_img, SalonName } from "../components/SalonStaticVar";
 import type { LoaderFunction } from "@remix-run/node";
-import { json, useActionData, useLoaderData } from "@remix-run/react";
+import { json, useLoaderData } from "@remix-run/react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import { Navigation, Pagination } from 'swiper/modules';
 import { FaStar } from "react-icons/fa"
-import { useState } from "react";
-import { Form } from "@remix-run/react";
-import { Button } from "../components/ButtonFormReview";
-import { Review, createReview } from "../models/reviews";
-import {  Table_Review } from "../utils/db.server";
-import { addReview } from "../utils/review.server";
+import { Review } from "../models/reviews";
+import { Table_Review } from "../utils/db.server";
 
 interface Service {
   image_url: string;
   service_name: string;
-}
-
-interface error {
-  invalidComment?: string
 }
 
 const reviewsDummy: Review[] = [
@@ -58,25 +50,8 @@ export const loader: LoaderFunction = async () => {
   return json({ services, reviews });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-
-  const error: error = {}
-
-  const rating: number = parseInt(formData.get("rating") as string);
-  const comment: string = (formData.get("comment") as string).trim();
-  console.log(formData.get("rating"));
-  console.log(formData.get("comment"));
-  if (comment.length === 0){
-    error.invalidComment = "Blank comment"
-  } else {
-    const review: Review = createReview('UserDummy',rating, comment)
-    await addReview(review)
-  }
-  
-  return {
-    error: comment.length === 0 ? error : null
-  };
+export async function action() {
+  return null
 }
 
 export const meta: MetaFunction = () => {
@@ -88,17 +63,6 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const { services, reviews } = useLoaderData<{ services: Service[], reviews: Review[] }>();
-  const [rating, setRating] = useState(0);
-  const actionData = useActionData<typeof action>()
-  const invalidComment = actionData?.error?.invalidComment
-
-  const handleClick = (index: number) => {
-    if (index === rating) {
-      setRating(0);
-    } else {
-      setRating(index);  
-    }
-  };
 
   return (
     <div className="font-sans">
@@ -209,46 +173,6 @@ export default function Index() {
             </SwiperSlide>
           ))}
         </Swiper>
-      </section>
-
-      {/* REVIEW FORM SECTION */}
-      <section>
-        <h2 className="h2 flex justify-center mt-[5vh]">Review Us!</h2>
-        <Form method="post" className="flex flex-col ">
-          <div className="flex flex-row mt-[2vh] w-full justify-center">
-            <div className="flex w-[40vw] justify-around">
-              {[...Array(5)].map((_, index) => (
-                <FaStar
-                key={index}
-                size={70}
-                color={index < (rating) ? 'gold' : 'lightgray'}
-                onClick={() => handleClick(index + 1)}
-                style={{ cursor: 'pointer' }}
-                />
-              ))}
-            </div>
-            <input name="rating" type="number" hidden value={rating} />
-          </div>
-
-          <div className="mt-[3vh] flex flex-col items-center justify-center">
-            <textarea
-                name="comment"
-                rows={4}
-                placeholder="Share your experience"
-                className="resize-none flex items-start sm:w-[70vw] lg:w-[50%] border-[0.2vw] border-accent rounded-[1vw] p-4 h-[45vh]"
-                required
-            ></textarea>
-            {invalidComment && (
-              <span className="text-red-500 h-[2vh] text-[2vh] sm:w-[70vw] lg:w-[50%]">
-                {invalidComment}
-              </span>
-            )}
-          </div>
-
-          <div className="flex w-full justify-center mt-[3vh]">
-            <Button type="submit">Send Review</Button>
-          </div>
-        </Form >
       </section>
     </div>
   )
