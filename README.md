@@ -46,27 +46,59 @@
 
 ### Desktop - Home Page
 
-![Example screenshot](./Screenshots/Level3-HomePage-Desktop.png)
+![Example screenshot](./Screenshots/Level4-HomePage-Desktop.png)
+
+### Desktop - Sign Up
+
+![Example screenshot](./Screenshots/Level4-SignUp-Desktop.png)
+
+### Desktop - Login
+
+![Example screenshot](./Screenshots/Level4-Login-Desktop.png)
+
+### Desktop - Profile
+
+![Example screenshot](./Screenshots/Level4-Profile-Desktop.png)
+
+### Desktop - Service
+
+![Example screenshot](./Screenshots/Level4-Service-Desktop.png)
 
 ### Desktop - Reservation
 
-![Example screenshot](./Screenshots/Level3-Reservation-Desktop.png)
+![Example screenshot](./Screenshots/Level4-Reservation-Desktop.png)
+
+### Desktop - Review
+
+![Example screenshot](./Screenshots/Level4-Review-Desktop.png)
 
 ### Mobile - Home Page
 
-![Example screenshot](./Screenshots/Level3-HomePage-Mobile.png)
+![Example screenshot](./Screenshots/Level4-HomePage-Mobile.png)
+
+### Mobile - SignUp
+
+![Example screenshot](./Screenshots/Level4-SignUp-Mobile.png)
+
+### Mobile - Login
+
+![Example screenshot](./Screenshots/Level4-Login-Mobile.png)
+
+### Mobile - Profile
+
+![Example screenshot](./Screenshots/Level4-Profile-Mobile.png)
+
+### Mobile - Service
+
+![Example screenshot](./Screenshots/Level4-Service-Mobile.png)
 
 ### Mobile - Reservation
 
-![Example screenshot](./Screenshots/Level3-Reservation-Mobile.png)
+![Example screenshot](./Screenshots/Level4-Reservation-Mobile.png)
 
-### Firebase - Reservation
+### Mobile - Review
 
-![Example screenshot](./Screenshots/Level3-Firebase-Reservation.jpg)
-
-### Firebase - Reviews
-
-![Example screenshot](./Screenshots/Level3-Firebase-Reviews.jpg)
+![Example screenshot](./Screenshots/Level4-Review-Mobile.png)
 
 
 ## Setup
