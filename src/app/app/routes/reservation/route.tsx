@@ -209,7 +209,7 @@ export default function Reservation() {
       
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden">
             {recentReservations.map((reservation: ReservationEntry) => (
-              <div key={`${reservation.name}-${reservation.phone_number}-${reservation.service}-${reservation.datetime}`} className="w-[30vw] bg-gray-100 space-y-3 p-4 rounded-lg shadow">
+              <div key={`${reservation.name}-${reservation.phone_number}-${reservation.service}-${reservation.datetime}`} className="w-[30vw] bg-accent space-y-3 p-4 rounded-lg shadow">
                 <div className="flex justify-between items-center space-x-2 text-sm">
                   <div>
                     <div className="text-primary font-bold hover:underline">{reservation.name}</div>
