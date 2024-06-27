@@ -8,12 +8,19 @@ import { dropDownEntry } from "./interface";
 import { validate } from "./validate";
 import { getUserSession } from "../../utils/session.server";
 import { getTableCustomerReservation } from "../../utils/db.server";
+import { isUserAdmin } from "../../utils/user.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const sessionUser = await getUserSession(request);
   if(!sessionUser){
     return redirect("/")
   }
+  const email = sessionUser.email as string
+  const isAdmin: boolean = await isUserAdmin(email) as boolean
+  if(isAdmin){
+    return redirect("/")
+  }
+
   const dropDownServices : dropDownEntry[] = [
     {label: Service1, value: Service1},
     {label: Service2, value: Service2},
@@ -129,13 +136,13 @@ export default function Reservation() {
             </select>
           </div>
           <div className="flex sm:flex-col lg:flex-row justify-around">
-            <label htmlFor="datetime" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Date and Time</label>
-            <div className="w-[30vw]"> 
+            <label htmlFor="datetime" className="sm:w-[40vw] lg:w-[15vw] text-[3vh]">Date and Time</label>
+            <div className="w-[40vw] lg:w-[30vw]"> 
               <input
                 name="datetime"
                 type="datetime-local"
                 required
-                className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
+                className="w-[40vw] lg:w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
               />
               {invalidDatetime && (
                 <span className="text-red-500 h-[2vh] text-[2vh] ">

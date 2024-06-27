@@ -6,6 +6,7 @@ import { createReview, Review } from "../../models/reviews";
 import { addReview } from "../../utils/review.server";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
+import { isUserAdmin } from "../../utils/user.server";
 
 interface error {
     invalidComment?: string
@@ -14,6 +15,11 @@ interface error {
 export async function loader({ request }: LoaderFunctionArgs) {
   const sessionUser = await getUserSession(request);
   if(!sessionUser){
+    return redirect("/")
+  }
+  const email = sessionUser.email as string
+  const isAdmin: boolean = await isUserAdmin(email) as boolean
+  if(isAdmin){
     return redirect("/")
   }
 

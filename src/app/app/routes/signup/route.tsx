@@ -3,6 +3,8 @@ import { Button } from "../../components/ButtonFormReview";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { signUp } from "../../utils/db.server";
 import { createUserSession, getUserSession, signOut } from "../../utils/session.server";
+import { User, createUser } from "../../models/user";
+import { addUser } from "~/utils/user.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const sessionUser = await getUserSession(request);
@@ -25,11 +27,15 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
   const email: string = formData.get("email") as string;
+  const fullname: string = formData.get("fullname") as string;
+  const phone_number: string = formData.get("phone_number") as string;
   const password: string = formData.get("password") as string;
   try {
     const { user } = await signUp(email, password);
     const token = await user.getIdToken();
-    return createUserSession(token, "/reservation");
+    const newUser: User = createUser(fullname, phone_number)
+    await addUser(newUser,email)
+    return createUserSession(token, "/");
   } catch (error) {
     if (error.code === "auth/email-already-in-use") {
       return {

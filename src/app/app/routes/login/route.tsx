@@ -3,12 +3,14 @@ import { Button } from "../../components/ButtonFormReview";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { signIn } from "../../utils/db.server";
 import { createUserSession, getUserSession, signOut } from "../../utils/session.server";
+import { isUserAdmin } from "../../utils/user.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const sessionUser = await getUserSession(request);
   if(sessionUser){
     return signOut(request)
   }
+  
   return null
 }
 
@@ -21,7 +23,9 @@ export async function action({ request }: ActionFunctionArgs) {
   try {
     const { user } = await signIn(email, password);
     const token = await user.getIdToken();
-    return createUserSession(token, "/reservation");
+    const isAdmin: boolean = await isUserAdmin(email) as boolean
+    const redirectTo: string = isAdmin ? "/salon_services" : "/"
+    return createUserSession(token, redirectTo);
   } catch (error) {
     return { error: "Invalid email or password"}
   }
