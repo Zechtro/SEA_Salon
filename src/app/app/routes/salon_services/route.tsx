@@ -1,9 +1,10 @@
 import { Form, redirect, useActionData } from "@remix-run/react";
 import { Button } from "../../components/ButtonFormReview";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Table_User, signIn } from "../../utils/db.server";
-import { createUserSession, getUserSession } from "../../utils/session.server";
+import { getUserSession } from "../../utils/session.server";
 import { isUserAdmin } from "../../utils/user.server";
+import { ServiceInfo, createService } from "../../models/service";
+import { addService } from "../../utils/service.server";
 
 export interface dropDownEntry {
     label: string,
@@ -37,39 +38,40 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
-  const email = formData.get("email") as string
-  const password = formData.get("password") as string
-
-  try {
-    const { user } = await signIn(email, password);
-    const token = await user.getIdToken();
-    const isAdmin: boolean = (await Table_User.doc(email).get()).data()?.admin as boolean
-    const redirectTo: string = isAdmin ? "/salon_services" : "/"
-    return createUserSession(token, redirectTo);
-  } catch (error) {
-    return { error: "Invalid email or password"}
+  const service_name: string = (formData.get("service_name") as string).trim()
+  const duration: number = parseInt(formData.get("duration") as string)
+  console.log(duration)
+  if (service_name.length > 0){
+    const service: ServiceInfo = createService(service_name, duration)
+    await addService(service)
+  }
+  
+  return {
+    error: service_name.length === 0 ? "Blank service name" : null,
+    success: service_name.length === 0 ? null : "Service added successfully"
   }
 }
 
 export default function Salon_services() {
     const actionData = useActionData<typeof action>()
     const invalidServiceName = actionData?.error
+    const successMessage = actionData?.success
 
     return (
         <div className="font-sans flex flex-col items-center">
           <h1 className="h1 mt-[5vh]">Add Service</h1>
           <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[50vw] h-[40vh] rounded-lg border-4 border-accent">
             <div className="flex sm:flex-col lg:flex-row justify-around">
-            <label htmlFor="service_name" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Service Name</label>
-            <div className="w-[30vw]"> 
-                <input
-                name="service_name"
-                type="text"
-                placeholder="Creambath"
-                required
-                className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
-                />
-            </div>
+              <label htmlFor="service_name" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Service Name</label>
+              <div className="w-[30vw]"> 
+                  <input
+                  name="service_name"
+                  type="text"
+                  placeholder="Creambath"
+                  required
+                  className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
+                  />
+              </div>
             </div>
             {invalidServiceName && (
             <span className="text-red-500 h-[2vh] text-[2vh] ">
@@ -77,20 +79,25 @@ export default function Salon_services() {
             </span>
             )}
             <div className="flex sm:flex-col lg:flex-row justify-around">
-            <label htmlFor="duration" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Duration</label>
-            <select
-              name="duration"
-              required
-              className="sm:w-[35vw] lg:w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent"
-            >
-              <option value="">Choose Duration</option>
-              {dropDownServices.map((option: dropDownEntry) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+              <label htmlFor="duration" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Duration</label>
+              <select
+                name="duration"
+                required
+                className="sm:w-[35vw] lg:w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent"
+              >
+                <option value="">Choose Duration</option>
+                {dropDownServices.map((option: dropDownEntry) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {successMessage && (
+              <span className="flex justify-center text-green-500 h-[1vh] text-[2vh] sm:w-[70vw] lg:w-[50%]">
+                {successMessage}
+              </span>
+            )}
             <Button type="submit">
               Add
             </Button>

@@ -3,9 +3,9 @@ import { User } from '../models/user'
 
 export async function addUser(newUser: User, email:string) {
     try {
-        const reviewRef = db.doc(`${Table_User.path}/${email}`);
+        const userRef = db.doc(`${Table_User.path}/${email}`);
     
-        await reviewRef.set(newUser);
+        await userRef.set(newUser);
         console.log("User added with ID:", `${email}`);
         return `${email}`;
     } catch (error) {

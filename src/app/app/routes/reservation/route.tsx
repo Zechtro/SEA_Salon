@@ -1,5 +1,4 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Service1, Service2, Service3, Service4, Service5} from "../../components/SalonStaticVar";
 import { json, useLoaderData, Form, useActionData, redirect } from "@remix-run/react";
 import { Button } from "../../components/ButtonFormReview";
 import { ReservationEntry, createReservation } from "../../models/reservation";
@@ -7,7 +6,7 @@ import { addReservation } from "../../utils/reservation.server";
 import { dropDownEntry } from "./interface";
 import { validate } from "./validate";
 import { getUserSession } from "../../utils/session.server";
-import { getTableCustomerReservation } from "../../utils/db.server";
+import { Table_Service, getTableCustomerReservation } from "../../utils/db.server";
 import { isUserAdmin } from "../../utils/user.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -21,13 +20,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect("/")
   }
 
-  const dropDownServices : dropDownEntry[] = [
-    {label: Service1, value: Service1},
-    {label: Service2, value: Service2},
-    {label: Service3, value: Service3},
-    {label: Service4, value: Service4},
-    {label: Service5, value: Service5},
-  ];
+  let dropDownServices : dropDownEntry[] = []
+  try{
+    const servicesDocs = await Table_Service.get()
+    servicesDocs.forEach(doc =>
+      dropDownServices.push({
+        label: doc.data().service_name,
+        value: doc.data().service_name
+      })
+    )
+  } catch (error) {
+    console.error("Error fetching services:", error);
+    dropDownServices = []
+  }
 
   let reservations: ReservationEntry[]
   try{
@@ -62,7 +67,7 @@ export async function action({ request }: ActionFunctionArgs) {
     await addReservation(reservation, userEmail)
   }
   
-  return { error }
+  return { error: !error ? null : error, success: error ? null : "Reservation success" }
 }
 
 export const meta: MetaFunction = () => {
@@ -78,6 +83,7 @@ export default function Reservation() {
   const invalidName = actionData?.error?.invalidName
   const invalidPhoneNumber = actionData?.error?.invalidPhoneNumber
   const invalidDatetime = actionData?.error?.invalidDatetime
+  const successMessage = actionData?.success
 
   return (
     <div className="font-sans flex flex-col items-center">
@@ -151,6 +157,11 @@ export default function Reservation() {
               )}
             </div>
           </div>
+          {successMessage && (
+              <span className="flex justify-center text-green-500 h-[2vh] text-[2vh] sm:w-[70vw] lg:w-[50%]">
+                {successMessage}
+              </span>
+            )}
           <Button type="submit">
             Submit
           </Button>

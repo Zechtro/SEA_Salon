@@ -60,6 +60,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <div className="hidden lg:flex justify-start items-center sm:w-[10vw] md:w-[25vw] lg:[50vw] xl:w-[50vw] 2xl:w-[60vw] ml-10">
                 <nav id="main-navigation">
                   <ul className="flex justify-start">
+                    {isLoggedIn && (
+                      <li className="nav-item w-[13vw] 2xl:w-[8vw]">
+                        <NavLink preventScrollReset to="/profile" className="p-4">Profile</NavLink>
+                      </li>
+                    )}
                     {isLoggedIn && !isAdmin && (
                       <li className="nav-item w-[13vw] 2xl:w-[8vw]">
                         <NavLink preventScrollReset to="/reservation" className="p-4">Reservation</NavLink>
@@ -105,6 +110,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div hidden={!isMenuClicked} className="container">
             <nav>
               <ul className="fixed w-[35vw] bg-white overflow-hidden border-t top-[90px] right-4 flex lg:hidden flex-col items-end gap-4 rounded-b-xl">
+                {isLoggedIn && (
+                  <li className="nav-item">
+                    <NavLink onClick={handleMenuClicked} preventScrollReset to="/Profile" className="pr-4">Profile</NavLink>
+                  </li>
+                )}
                 {isLoggedIn && !isAdmin && (
                   <li className="nav-item">
                     <NavLink onClick={handleMenuClicked} preventScrollReset to="/reservation" className="pr-4">Reservation</NavLink>

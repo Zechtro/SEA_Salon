@@ -1,10 +1,10 @@
-import { Form, json, useActionData } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import { Button } from "../../components/ButtonFormReview";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { signUp } from "../../utils/db.server";
 import { createUserSession, getUserSession, signOut } from "../../utils/session.server";
 import { User, createUser } from "../../models/user";
-import { addUser } from "~/utils/user.server";
+import { addUser } from "../../utils/user.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const sessionUser = await getUserSession(request);
@@ -17,13 +17,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
 
-    // User ID
-    // Full Name
-    // Email
-    // Phone Number
-    // Password + Hashing
-    // Role (Customer/Admin)
-
   const formData = await request.formData();
 
   const email: string = formData.get("email") as string;
@@ -35,7 +28,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const token = await user.getIdToken();
     const newUser: User = createUser(fullname, phone_number)
     await addUser(newUser,email)
-    return createUserSession(token, "/");
+    return createUserSession(token, "/profile");
   } catch (error) {
     if (error.code === "auth/email-already-in-use") {
       return {

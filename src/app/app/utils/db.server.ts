@@ -12,6 +12,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { User } from '../models/user';
+import { ServiceInfo } from '..//models/service';
 
 dotenv.config()
 
@@ -67,6 +68,7 @@ export async function signOutFirebase() {
 }
 
 export const Table_Review = createCollection<Review>('reviews')
+export const Table_Service = createCollection<ServiceInfo>('services')
 export const Table_User = createCollection<User>('users')
 export function getTableCustomerReservation(email:string) {
   return createCollection<ReservationEntry>(`reservation-${email}`)
