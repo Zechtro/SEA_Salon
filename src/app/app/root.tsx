@@ -57,27 +57,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </NavLink>
               </div>
               {/* Main Navigation */}
-              <div className="hidden lg:flex justify-start items-center sm:w-[10vw] md:w-[25vw] lg:[50vw] xl:w-[50vw] 2xl:w-[60vw] ml-10">
+              <div className="hidden lg:flex justify-start items-center sm:w-[10vw] md:w-[40vw] lg:[50vw] xl:w-[50vw] 2xl:w-[60vw] ml-10">
                 <nav id="main-navigation">
                   <ul className="flex justify-start">
                     {isLoggedIn && (
                       <li className="nav-item w-[13vw] 2xl:w-[8vw]">
-                        <NavLink preventScrollReset to="/profile" className="p-4">Profile</NavLink>
+                        <NavLink preventScrollReset to="/profile" className="p-4 flex justify-center">Profile</NavLink>
                       </li>
                     )}
                     {isLoggedIn && !isAdmin && (
                       <li className="nav-item w-[13vw] 2xl:w-[8vw]">
-                        <NavLink preventScrollReset to="/reservation" className="p-4">Reservation</NavLink>
+                        <NavLink preventScrollReset to="/reservation" className="p-4 flex justify-center">Reservation</NavLink>
                       </li>
                     )}
                     {isLoggedIn && !isAdmin && (
                       <li className="nav-item w-[13vw] 2xl:w-[8vw]">
-                        <NavLink preventScrollReset to="/review_us" className="p-4">Review Us</NavLink>
+                        <NavLink preventScrollReset to="/review_us" className="p-4 flex justify-center">Review Us</NavLink>
                       </li>
                     )}
                     {isLoggedIn && isAdmin && (
                       <li className="nav-item w-[13vw] 2xl:w-[8vw]">
-                        <NavLink preventScrollReset to="/salon_services" className="p-4">Services</NavLink>
+                        <NavLink preventScrollReset to="/salon_services" className="p-4 flex justify-center">Services</NavLink>
                       </li>
                     )}
                   </ul>

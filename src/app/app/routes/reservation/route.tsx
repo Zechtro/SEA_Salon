@@ -172,7 +172,7 @@ export default function Reservation() {
       <section className="flex flex-col items-center mt-[8vh] w-full">
         <h2 className="h2">Recent Reservations</h2>
         <div className="flex w-[75vw] flex-col items-center mt-[3vh]">
-          <div className="overflow-auto rounded-lg shadow hidden md:block w-full">
+          <div className="overflow-auto rounded-lg shadow hidden lg:block w-full">
             <table className="w-full">
               <thead className="bg-accent border-b-2 border-accent">
               <tr>
@@ -185,7 +185,7 @@ export default function Reservation() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {recentReservations.map((reservation: ReservationEntry) => (
-                <tr key={reservation.datetime} className="bg-gray-100">
+                <tr key={`${reservation.name}-${reservation.phone_number}-${reservation.service}-${reservation.datetime}`} className="bg-gray-100">
                   <td className="p-3 text-sm text-primary whitespace-nowrap">
                     <p className="text-[3vh] p-3">{reservation.name}</p>
                   </td>
@@ -207,61 +207,24 @@ export default function Reservation() {
             </table>
           </div>
       
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-            <div className="bg-gray-100 space-y-3 p-4 rounded-lg shadow">
-              <div className="flex items-center space-x-2 text-sm">
-                <div>
-                  <div className="text-blue-500 font-bold hover:underline">#1000</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden">
+            {recentReservations.map((reservation: ReservationEntry) => (
+              <div key={`${reservation.name}-${reservation.phone_number}-${reservation.service}-${reservation.datetime}`} className="w-[30vw] bg-gray-100 space-y-3 p-4 rounded-lg shadow">
+                <div className="flex justify-between items-center space-x-2 text-sm">
+                  <div>
+                    <div className="text-primary font-bold hover:underline">{reservation.name}</div>
+                  </div>
+                  <div className="text-gray-500">{`${(new Date(reservation.datetime)).getDate()}/${(new Date(reservation.datetime)).getMonth()}/${(new Date(reservation.datetime)).getFullYear()}`}</div>
                 </div>
-                <div className="text-gray-500">10/10/2021</div>
-                <div>
-                  <span
-                    className="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Delivered</span>
+                <div className="text-sm text-primary font-emibold">
+                  {reservation.service}
                 </div>
-              </div>
-              <div className="text-sm text-primary ">
-                Kring New Fit office chair, mesh + PU, black
-              </div>
-              <div className="text-sm font-medium text-black">
-                $200.00
-              </div>
-            </div>
-            <div className="bg-white space-y-3 p-4 rounded-lg shadow">
-              <div className="flex items-center space-x-2 text-sm">
-                <div>
-                  <div className="text-blue-500 font-bold hover:underline">#1001</div>
-                </div>
-                <div className="text-gray-500">10/10/2021</div>
-                <div>
-                  <span
-                    className="p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">Shipped</span>
+                <div className="text-sm font-medium text-black">
+                  {`${(new Date(reservation.datetime)).getHours()}:${(new Date(reservation.datetime)).getMinutes().toString().length === 1 ? `0${(new Date(reservation.datetime)).getMinutes()}` : (new Date(reservation.datetime)).getMinutes()}`}
                 </div>
               </div>
-              <div className="text-sm text-primary ">
-                Kring New Fit office chair, mesh + PU, black
-              </div>
-              <div className="text-sm font-medium text-black">
-                $200.00
-              </div>
-            </div>
-            <div className="bg-white space-y-3 p-4 rounded-lg shadow">
-              <div className="flex items-center space-x-2 text-sm">
-                <div>
-                  <div className="text-blue-500 font-bold hover:underline">#1002</div>
-                </div>
-                <div className="text-gray-500">10/10/2021</div>
-                <div>
-                  <span
-                    className="p-1.5 text-xs font-medium uppercase tracking-wider text-gray-800 bg-gray-200 rounded-lg bg-opacity-50">Canceled</span>
-                </div>
-              </div>
-              <div className="text-sm text-primary ">
-                Kring New Fit office chair, mesh + PU, black
-              </div>
-              <div className="text-sm font-medium text-black">
-                $200.00
-              </div>
-            </div>
+            ))}
+
           </div>
         </div>
 
