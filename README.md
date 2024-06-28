@@ -20,7 +20,7 @@
 
 
 ## Deployment Link
-- Navigate to "Deployments" in this repository and click the link Production – sea-salon environment
+- Navigate to "Deployments" in this repository and click the link in Production environment.
 
 
 ## Technologies Used
