@@ -8,6 +8,6 @@ export function createService(service_name: string, duration: number): ServiceIn
     return {
         service_name: service_name,
         duration: duration,
-        image_path: "../../public/assets/service_image/other.jpg"
+        image_path: "/assets/service_image/other.jpg"
     }
 }
