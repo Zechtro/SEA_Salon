@@ -30,35 +30,35 @@ export default function Profile() {
     return (
         <div className="font-sans flex flex-col items-center">
           <h1 className="h1 mt-[5vh]">Profile</h1>
-          <div className="flex flex-col justify-around items-center mt-[5vh] w-[50vw] sm:h-[70vh] lg:h-[60vh] rounded-lg border-4 border-accent">
-            <div className="flex sm:flex-col lg:flex-row justify-around">
-              <p className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Email</p>
-              <div className="w-[30vw]">
-                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2 overflow-x-auto overflow-y-hidden">
+          <div className="flex flex-col justify-around items-center mt-[5vh] w-[80vw] sm:w-[50vw] sm:h-[70vh] lg:h-[60vh] rounded-lg border-4 border-accent">
+            <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+              <p className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Email</p>
+              <div className="w-[40vw] sm:w-[30vw]">
+                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[5vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
                   {email}
                 </p>
               </div> 
             </div>
-            <div className="flex sm:flex-col lg:flex-row justify-around">
-              <p className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Full Name</p>
-              <div className="w-[30vw]">
-                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2 overflow-x-auto overflow-y-hidden">
+            <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+              <p className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Full Name</p>
+              <div className="w-[40vw] sm:w-[30vw]">
+                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[5vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
                   {user.full_name}
                 </p>
               </div> 
             </div>
-            <div className="flex sm:flex-col lg:flex-row justify-around">
-              <p className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Phone Number</p>
-              <div className="w-[30vw]">
-                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2 overflow-x-auto overflow-y-hidden">
+            <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+              <p className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Phone Number</p>
+              <div className="w-[40vw] sm:w-[30vw]">
+                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[5vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
                   {user.phone_number}
                 </p>
               </div> 
             </div>
-            <div className="flex sm:flex-col lg:flex-row justify-around">
-              <p className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Role</p>
-              <div className="w-[30vw]">
-                <p className="flex items-center w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2 overflow-x-auto overflow-y-hidden">
+            <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+              <p className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Role</p>
+              <div className="w-[40vw] sm:w-[30vw]">
+                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[5vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
                   {user.admin ? "Admin" : "Customer"}
                 </p>
               </div> 
