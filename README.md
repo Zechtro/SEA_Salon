@@ -20,7 +20,7 @@
 
 
 ## Deployment Link
-- Level 4 : https://sea-salon-deploy-33brr8xs1-zechtros-projects.vercel.app/ 
+- Navigate to "Deployments" in this repository and click the link Production – sea-salon environment
 
 
 ## Technologies Used
