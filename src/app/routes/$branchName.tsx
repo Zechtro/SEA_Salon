@@ -5,8 +5,8 @@ import { getUserSession } from "../utils/session.server";
 import { BranchInfo } from "../models/branch";
 import { isUserAdmin } from "../utils/user.server";
 import { ServiceInfo } from "../models/service";
-import { BranchServices, createBranchServices } from "~/models/branch_services";
-import { addBranchServices } from "~/utils/branch_service.server";
+import { BranchServices, createBranchServices } from "../models/branch_services";
+import { addBranchServices } from "../utils/branch_service.server";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   console.log(params.branchName)
