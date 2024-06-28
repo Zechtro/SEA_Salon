@@ -20,7 +20,7 @@
 
 
 ## Deployment Link
-- Navigate to "Deployments" in this repository and click the link in Production environment.
+https://sea-salon-seven.vercel.app/
 
 
 ## Technologies Used

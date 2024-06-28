@@ -74,7 +74,7 @@ export default function Index() {
         <h2 className="h2 flex justify-center">Our Services</h2>
         <Swiper
           spaceBetween={0}
-          slidesPerView={3}
+          slidesPerView={1}
           pagination={{ 
             clickable: true,
           }}
@@ -86,21 +86,28 @@ export default function Index() {
           breakpoints={{
             360: {
               grid: {
-                rows: 2,
+                rows: 1,
               },
-              slidesPerGroup: 0,
+              slidesPerView:1
+            },
+            640: {
+              grid: {
+                rows: 1,
+              },
+              slidesPerView:2
             },
             960: {
               grid: {
                 rows: 1,
-              }
+              },
+              slidesPerView:3
             }
           }}
           className="mt-[3vh]"
         >
           {services.map((service: ServiceInfo) => (
-            <SwiperSlide key={service.service_name} className="flex w-[25vw] flex-row justify-center items-center">
-              <div  className="mx-auto bg-cover bg-center mb-[4vh] sm:h-[35vh] w-[25vw] lg:h-[70vh] relative z-20 rounded-xl flex justify-center items-end" style={{ backgroundImage: `url(${service.image_path})` }}>
+            <SwiperSlide key={service.service_name} className="flex w-[70vw] sm:w-[35vw] lg:w-[25vw] flex-row justify-center items-center">
+              <div  className="mx-auto bg-cover bg-center mb-[4vh] h-[35vh] sm:h-[35vh] w-[70vw] sm:w-[35vw] lg:w-[25vw] lg:h-[70vh] relative z-20 rounded-xl flex justify-center items-end" style={{ backgroundImage: `url(${service.image_path})` }}>
                 <div className="h-[20%] w-[100%] overflow-hidden flex justify-center items-center text-center backdrop-filter backdrop-blur-sm bg-white/50 lg:rounded-tr-[60px] sm:rounded-tr-[30px] rounded-br-xl">
                   <h3 className="lg:text-[25px] sm:text-[15px] xl:text-[35px]">{service.service_name}</h3>
                 </div>
