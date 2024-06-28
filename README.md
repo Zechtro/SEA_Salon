@@ -4,6 +4,7 @@
 
 ## Table of Contents
 * [General Info](#general-information)
+* [Deployment Link](#deployment_link)
 * [Technologies Used](#technologies-used)
 * [Features](#features)
 * [Screenshots](#screenshots)
@@ -16,6 +17,10 @@
 
 ## General Information
 - This project is made to fulfill Compfest 16 Software Engineering Academy submission.
+
+
+## Deployment Link
+- Level 4 : https://sea-salon-deploy-33brr8xs1-zechtros-projects.vercel.app/ 
 
 
 ## Technologies Used
