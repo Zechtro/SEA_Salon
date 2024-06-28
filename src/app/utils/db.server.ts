@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { initializeApp, getApps } from 'firebase/app';
 import admin from "firebase-admin";
 import { CollectionReference, DocumentData } from 'firebase-admin/firestore';
-import { applicationDefault, initializeApp as initializeAdminApp, } from 'firebase-admin/app'; 
+import { initializeApp as initializeAdminApp, } from 'firebase-admin/app'; 
 import { ReservationEntry } from '../models/reservation';
 import { Review } from '../models/reviews';
 import {
