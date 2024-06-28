@@ -20,7 +20,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect("/")
   }
 
-  let dropDownServices : dropDownEntry[] = []
+  const dropDownServices : dropDownEntry[] = []
   try{
     const servicesDocs = await Table_Service.get()
     servicesDocs.forEach(doc =>
@@ -31,7 +31,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     )
   } catch (error) {
     console.error("Error fetching services:", error);
-    dropDownServices = []
   }
 
   let reservations: ReservationEntry[]
