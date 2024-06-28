@@ -28,7 +28,11 @@ const firebaseConfig = {
 
 if (!getApps().length) {
     initializeAdminApp({
-      credential: applicationDefault(),
+      credential: admin.credential.cert({
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY,
+        projectId: process.env.FIREBASE_PROJECT_ID
+      }),
       databaseURL: `https://${process.env.FIREBASE_PROJECT_ID}.firebaseio.com`,
     });
   }
