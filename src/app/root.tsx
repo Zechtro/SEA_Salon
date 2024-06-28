@@ -80,6 +80,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
                         <NavLink preventScrollReset to="/salon_services" className="p-4 flex justify-center">Services</NavLink>
                       </li>
                     )}
+                    {isLoggedIn && isAdmin && (
+                      <li className="nav-item w-[13vw] 2xl:w-[8vw]">
+                        <NavLink preventScrollReset to="/branch" className="p-4 flex justify-center">Branches</NavLink>
+                      </li>
+                    )}
                   </ul>
                 </nav>
               </div>
@@ -128,6 +133,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 {isLoggedIn && isAdmin && (
                   <li className="nav-item">
                     <NavLink onClick={handleMenuClicked}  preventScrollReset to="/salon_services" className="pr-4">Services</NavLink>
+                  </li>
+                )}
+                {isLoggedIn && isAdmin && (
+                  <li className="nav-item">
+                    <NavLink onClick={handleMenuClicked}  preventScrollReset to="/branch" className="pr-4">Branches</NavLink>
                   </li>
                 )}
                 {isLoggedIn && (

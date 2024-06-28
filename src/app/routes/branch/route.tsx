@@ -1,4 +1,4 @@
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { Button } from "../../components/Button";
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { getUserSession } from "../../utils/session.server";
@@ -179,7 +179,7 @@ export default function Branch() {
                         <p className="text-[3vh] p-3">{branch.close_time}</p>
                       </td>
                       <td className="p-3 text-sm text-primary  whitespace-nowrap flex justify-center">
-                        <button className="p-2 rounded-md bg-accent text-accent-secondary hover:bg-accent-hover">Services</button>
+                        <Link to={`/${branch.branch_name}`} className="p-2 rounded-md bg-accent text-accent-secondary hover:bg-accent-hover">Services</Link>
                       </td>
                     </tr>
                     ))}
@@ -200,7 +200,7 @@ export default function Branch() {
                       {branch.open_time} - {branch.close_time}
                     </div>
                     <div className="text-sm font-medium text-black">
-                      <button className="bg-white p-2 rounded-md hover:bg-gray-500 hover:text-white">Services</button>
+                      <Link to={`/${branch.branch_name}`}  className="bg-white p-2 rounded-md hover:bg-gray-500 hover:text-white">Services</Link>
                     </div>
                   </div>
                 ))}

@@ -14,6 +14,7 @@ import {
 import { User } from '../models/user';
 import { ServiceInfo } from '../models/service';
 import { BranchInfo } from '../models/branch';
+import { BranchServices } from '../models/branch_services';
 
 dotenv.config()
 
@@ -78,4 +79,7 @@ export const Table_Service = createCollection<ServiceInfo>('services')
 export const Table_User = createCollection<User>('users')
 export function getTableCustomerReservation(email:string) {
   return createCollection<ReservationEntry>(`reservation-${email}`)
+}
+export function getTableBranchServices(branch_name:string) {
+  return createCollection<BranchServices>(`branch-services-${branch_name}`)
 }

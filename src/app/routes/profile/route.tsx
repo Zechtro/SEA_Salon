@@ -34,7 +34,7 @@ export default function Profile() {
             <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
               <p className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Email</p>
               <div className="w-[40vw] sm:w-[30vw]">
-                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[5vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
+                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[7vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
                   {email}
                 </p>
               </div> 
@@ -42,7 +42,7 @@ export default function Profile() {
             <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
               <p className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Full Name</p>
               <div className="w-[40vw] sm:w-[30vw]">
-                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[5vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
+                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[7vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
                   {user.full_name}
                 </p>
               </div> 
@@ -50,7 +50,7 @@ export default function Profile() {
             <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
               <p className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Phone Number</p>
               <div className="w-[40vw] sm:w-[30vw]">
-                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[5vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
+                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[7vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
                   {user.phone_number}
                 </p>
               </div> 
@@ -58,7 +58,7 @@ export default function Profile() {
             <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
               <p className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Role</p>
               <div className="w-[40vw] sm:w-[30vw]">
-                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[5vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
+                <p className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[7vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2 overflow-y-clip overflow-x-auto">
                   {user.admin ? "Admin" : "Customer"}
                 </p>
               </div> 
