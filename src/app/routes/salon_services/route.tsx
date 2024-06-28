@@ -1,5 +1,5 @@
 import { Form, redirect, useActionData } from "@remix-run/react";
-import { Button } from "../../components/ButtonFormReview";
+import { Button } from "../../components/Button";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { getUserSession } from "../../utils/session.server";
 import { isUserAdmin } from "../../utils/user.server";

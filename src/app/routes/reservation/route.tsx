@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, useLoaderData, Form, useActionData, redirect } from "@remix-run/react";
-import { Button } from "../../components/ButtonFormReview";
+import { Button } from "../../components/Button";
 import { ReservationEntry, createReservation } from "../../models/reservation";
 import { addReservation } from "../../utils/reservation.server";
 import { dropDownEntry } from "./interface";
@@ -90,16 +90,16 @@ export default function Reservation() {
       <h1 className="h1 mt-[5vh]">Reservation</h1>
       {/* Reservation Form Section */}
       <section>
-        <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[50vw] sm:h-[70vh] lg:h-[60vh] rounded-lg border-4 border-accent">
-          <div className="flex sm:flex-col lg:flex-row justify-around">
-            <label htmlFor="name" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Name</label>
-            <div className="w-[30vw]">
+        <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[80vw] sm:w-[50vw] sm:h-[70vh] lg:h-[60vh] rounded-lg border-4 border-accent">
+          <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+            <label htmlFor="name" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Name</label>
+            <div className="w-[40vw] sm:w-[30vw]">
               <input
                 name="name"
                 type="text"
                 placeholder="John Doe"
                 required
-                className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
+                className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[5vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2"
               />
               {invalidName && (
                 <span className="text-red-500 h-[2vh] text-[2vh]">
@@ -108,16 +108,16 @@ export default function Reservation() {
               )}
             </div> 
           </div>
-          <div className="flex sm:flex-col lg:flex-row justify-around">
-            <label htmlFor="phone_number" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Phone Number</label>
-            <div className="w-[30vw]"> 
+          <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+            <label htmlFor="phone_number" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Phone Number</label>
+            <div className="w-[40vw] sm:w-[30vw]"> 
               <input
                 name="phone_number"
                 type="number"
                 min={0}
                 placeholder="08123456789"
                 required
-                className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
+                className="w-[40vw] sm:w-[30vw] h-[3vh] sm:h-[5vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2"
               />
               {invalidPhoneNumber && (
                 <span className="text-red-500 h-[2vh] text-[2vh] ">
@@ -126,12 +126,12 @@ export default function Reservation() {
               )}
             </div>
           </div>
-          <div className="flex sm:flex-col lg:flex-row justify-around">
-            <label htmlFor="service" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Service</label>
+          <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+            <label htmlFor="service" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Service</label>
             <select
               name="service"
               required
-              className="sm:w-[35vw] lg:w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent"
+              className="sm:w-[30vw] w-[40vw] h-[3vh] sm:h-[5vh] text-[1.1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2"
             >
               <option value="">Choose Service</option>
               {dropDownServices.map((option: dropDownEntry) => (
@@ -141,14 +141,14 @@ export default function Reservation() {
               ))}
             </select>
           </div>
-          <div className="flex sm:flex-col lg:flex-row justify-around">
-            <label htmlFor="datetime" className="sm:w-[40vw] lg:w-[15vw] text-[3vh]">Date and Time</label>
+          <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+            <label htmlFor="datetime" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh">Date and Time</label>
             <div className="w-[40vw] lg:w-[30vw]"> 
               <input
                 name="datetime"
                 type="datetime-local"
                 required
-                className="w-[40vw] lg:w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
+                className="w-[40vw] lg:w-[30vw] h-[3vh] sm:h-[5vh] text-[1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2"
               />
               {invalidDatetime && (
                 <span className="text-red-500 h-[2vh] text-[2vh] ">

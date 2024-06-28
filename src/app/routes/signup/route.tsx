@@ -1,5 +1,5 @@
 import { Form, useActionData } from "@remix-run/react";
-import { Button } from "../../components/ButtonFormReview";
+import { Button } from "../../components/Button";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { signUp } from "../../utils/db.server";
 import { createUserSession, getUserSession, signOut } from "../../utils/session.server";
@@ -52,16 +52,16 @@ export default function Signup() {
     return (
         <div className="font-sans flex flex-col items-center">
           <h1 className="h1 mt-[5vh]">Sign Up</h1>
-          <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[50vw] sm:h-[70vh] lg:h-[60vh] rounded-lg border-4 border-accent">
-            <div className="flex sm:flex-col lg:flex-row justify-around">
-              <label htmlFor="fullname" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Full Name</label>
+          <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[80vw] sm:w-[50vw] sm:h-[70vh] lg:h-[60vh] rounded-lg border-4 border-accent">
+            <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+              <label htmlFor="fullname" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Full Name</label>
                <div className="w-[30vw]">
                 <input
                   name="fullname"
                   type="text"
                   placeholder="John Doe"
                   required
-                  className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
+                  className="w-[30vw] h-[3vh] sm:h-[5vh] text-[2vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2"
                 />
                 {invalidFullname && (
                   <span className="text-red-500 h-[2vh] text-[2vh]">
@@ -70,15 +70,15 @@ export default function Signup() {
                 )}
               </div> 
             </div>
-            <div className="flex sm:flex-col lg:flex-row justify-around">
-              <label htmlFor="email" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Email</label>
+            <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+              <label htmlFor="email" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Email</label>
               <div className="w-[30vw]"> 
                 <input
                   name="email"
                   type="email"
                   placeholder="example@gmail.com"
                   required
-                  className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
+                  className="w-[30vw] h-[3vh] sm:h-[5vh] text-[2vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2"
                 />
                 {invalidEmail && (
                   <span className="text-red-500 h-[2vh] text-[2vh] ">
@@ -87,8 +87,8 @@ export default function Signup() {
                 )}
               </div>
             </div>
-            <div className="flex sm:flex-col lg:flex-row justify-around">
-              <label htmlFor="phone_number" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Phone Number</label>
+            <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+              <label htmlFor="phone_number" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Phone Number</label>
               <div className="w-[30vw]"> 
                 <input
                   name="phone_number"
@@ -96,7 +96,7 @@ export default function Signup() {
                   min={0}
                   placeholder="08123456789"
                   required
-                  className="w-[30vw] h-[5vh] text-[3vh] rounded-lg border-2 border-accent p-2"
+                  className="w-[30vw] h-[3vh] sm:h-[5vh] text-[2vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2"
                 />
                 {invalidPhonenumber && (
                   <span className="text-red-500 h-[2vh] text-[2vh] ">
@@ -105,14 +105,14 @@ export default function Signup() {
                 )}
               </div>
             </div>
-            <div className="flex sm:flex-col lg:flex-row justify-around">
-              <label htmlFor="password" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Password</label>
+            <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+              <label htmlFor="password" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Password</label>
               <div className="w-[30vw]"> 
                 <input
                   name="password"
                   type="password"
                   required
-                  className="w-[30vw] h-[5vh] text-[8vh] rounded-lg border-2 border-accent p-2"
+                  className="w-[30vw] h-[3vh] sm:h-[5vh] text-[2vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2"
                 />
                 {invalidPassword && (
                   <span className="text-red-500 h-[2vh] text-[2vh] ">
