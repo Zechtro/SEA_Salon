@@ -1,6 +1,5 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { MetaFunction, LoaderFunction } from "@remix-run/node";
 import { SalonSlogan, SalonName } from "../components/SalonStaticVar";
-import type { LoaderFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
@@ -100,7 +99,7 @@ export default function Index() {
           className="mt-[3vh]"
         >
           {services.map((service: ServiceInfo) => (
-            <SwiperSlide key={service.service_name} className="flex flex-row justify-center items-center">
+            <SwiperSlide key={service.service_name} className="flex w-[25vw] flex-row justify-center items-center">
               <div  className="bg-cover bg-center mb-[4vh] sm:h-[35vh] w-[25vw] lg:h-[70vh] relative z-20 rounded-xl flex justify-center items-end" style={{ backgroundImage: `url(${service.image_path})` }}>
                 <div className="h-[20%] w-[100%] overflow-hidden flex justify-center items-center text-center backdrop-filter backdrop-blur-sm bg-white/50 lg:rounded-tr-[60px] sm:rounded-tr-[30px] rounded-br-xl">
                   <h3 className="lg:text-[25px] sm:text-[15px] xl:text-[35px]">{service.service_name}</h3>
@@ -139,7 +138,7 @@ export default function Index() {
           className="w-[90vw] h-[48vh]"
         >
           {reviews && reviews.map((review: Review) => (
-            <SwiperSlide key={review.nama_user} className="flex flex-row justify-around items-center">
+            <SwiperSlide key={review.nama_user} className="swiper-slide flex flex-row justify-around items-center">
               <div className="flex justify-center items-center sm:w-[70vw] xl:w-[40vw] 2xl:w-[25vw] h-[40vh] bg-white rounded-xl border-[0.2vw] border-accent">
                 <div className="flex flex-col justify-around items-start sm:w-[65vw]  xl:w-[35vw] 2xl:w-[20vw] h-[35vh]">
                   <div>
