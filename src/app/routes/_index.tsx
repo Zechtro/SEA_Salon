@@ -139,7 +139,7 @@ export default function Index() {
         >
           {reviews && reviews.map((review: Review) => (
             <SwiperSlide key={review.nama_user} className="swiper-slide flex flex-row justify-around items-center">
-              <div className="flex justify-center items-center sm:w-[70vw] xl:w-[40vw] 2xl:w-[25vw] h-[40vh] bg-white rounded-xl border-[0.2vw] border-accent">
+              <div className="mx-auto flex justify-center items-center sm:w-[70vw] xl:w-[40vw] 2xl:w-[25vw] h-[40vh] bg-white rounded-xl border-[0.2vw] border-accent">
                 <div className="flex flex-col justify-around items-start sm:w-[65vw]  xl:w-[35vw] 2xl:w-[20vw] h-[35vh]">
                   <div>
                     <h3 className="h3">{review.nama_user}</h3>
