@@ -3,18 +3,14 @@ import { json, useLoaderData, Form, useActionData, redirect } from "@remix-run/r
 import { Button } from "../../components/Button";
 import { ReservationEntry, createReservation } from "../../models/reservation";
 import { addReservation } from "../../utils/reservation.server";
-import { dropDownEntry } from "./interface";
+import { BranchServiceMap, error } from "./interface";
 import { validate } from "./validate";
 import { getUserSession } from "../../utils/session.server";
-import { Table_Branch, Table_Service, getTableBranchServices, getTableCustomerReservation } from "../../utils/db.server";
+import { Table_Branch, getTableBranchServices, getTableCustomerReservation } from "../../utils/db.server";
 import { isUserAdmin } from "../../utils/user.server";
 import { BranchInfo } from "../../models/branch";
 import { BranchServices } from "../../models/branch_services";
 import { useState } from "react";
-
-interface BranchServiceMap {
-  [key: string]: string[];
-}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const sessionUser = await getUserSession(request);
@@ -27,26 +23,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect("/")
   }
 
-  const dropDownServices : dropDownEntry[] = []
-  try{
-    const servicesDocs = await Table_Service.get()
-    servicesDocs.forEach(doc =>
-      dropDownServices.push({
-        label: doc.data().service_name,
-        value: doc.data().service_name
-      })
-    )
-  } catch (error) {
-    console.error("Error fetching services:", error);
-    return redirect("/reservation")
-  }
-
   let reservations: ReservationEntry[]
   try{
     const reservationsDocs = await getTableCustomerReservation(sessionUser.email as string).get()
     reservations = reservationsDocs.docs.map(doc => ({
       name: doc.data().name,
       phone_number: doc.data().phone_number,
+      branch: doc.data().branch,
       service: doc.data().service,
       datetime: doc.data().datetime
     })).sort((a, b) => b.datetime.localeCompare(a.datetime))
@@ -93,7 +76,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect("/reservation")
   }
 
-  return json({ mapBranchServices: mapBranchServices, branches: branches, dropDownServices: dropDownServices, recentReservations: reservations });
+  return json({ mapBranchServices: mapBranchServices, recentReservations: reservations });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -101,19 +84,25 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const datetimestring : string = formData.get("datetime") as string;
   const name: string = (formData.get("name") as string).trim();
+  const branch: string = formData.get("branch") as string;
   const service: string = formData.get("service") as string;
   const phone_number: string = formData.get("phone_number") as string;  
 
-  const error = validate(name,phone_number,service,datetimestring)
+  const errorMessange = validate(name,phone_number,service,datetimestring)
 
-  if(!error){
-    const reservation: ReservationEntry = createReservation(name,phone_number,service,datetimestring)
+  if(!errorMessange){
+    const reservation: ReservationEntry = createReservation(name,phone_number,branch,service,datetimestring)
     const sessionUser = await getUserSession(request);
     const userEmail: string = sessionUser?.email as string
-    await addReservation(reservation, userEmail)
+    try{
+      await addReservation(reservation, userEmail)
+    }catch(errorMessange){
+      const uknownError: error = {}
+      uknownError.invalidDatetime = "Server errorMessange"
+    }
   }
   
-  return { error: !error ? null : error, success: error ? null : "Reservation success" }
+  return { error: !errorMessange ? null : errorMessange, success: errorMessange ? null : "Reservation success" }
 }
 
 export const meta: MetaFunction = () => {
@@ -126,7 +115,7 @@ export const meta: MetaFunction = () => {
 export default function Reservation() {
   const loaderData = useLoaderData<typeof loader>()
   // const branches = loaderData.branches
-  const dropDownServices = loaderData.dropDownServices
+  // const dropDownServices = loaderData.dropDownServices
   const recentReservations = loaderData.recentReservations
   const mapBranchServices = loaderData.mapBranchServices
   const actionData = useActionData<typeof action>()
@@ -239,13 +228,14 @@ export default function Reservation() {
       {/* Recent Reservations List Section */}
       <section className="flex flex-col items-center mt-[8vh] w-full">
         <h2 className="h2">Recent Reservations</h2>
-        <div className="flex w-[75vw] flex-col items-center mt-[3vh]">
+        <div className="flex w-[90vw] lg:w-[75vw] flex-col items-center mt-[3vh]">
           <div className="overflow-auto rounded-lg shadow hidden lg:block w-full">
             <table className="w-full">
               <thead className="bg-accent border-b-2 border-accent">
               <tr>
                 <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Name</th>
                 <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Phone Number</th>
+                <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Branch</th>
                 <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Service</th>
                 <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Date</th>
                 <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Time</th>
@@ -255,19 +245,22 @@ export default function Reservation() {
                 {recentReservations.map((reservation: ReservationEntry) => (
                 <tr key={`${reservation.name}-${reservation.phone_number}-${reservation.service}-${reservation.datetime}`} className="bg-gray-100">
                   <td className="p-3 text-sm text-primary whitespace-nowrap">
-                    <p className="text-[3vh] p-3">{reservation.name}</p>
+                    <p className="text-[3vh] p-3 w-[10vw] overflow-y-hidden overflow-x-auto">{reservation.name}</p>
                   </td>
                   <td className="p-3 text-sm text-primary  whitespace-nowrap">
-                    <p className="text-[3vh] p-3">{reservation.phone_number}</p>
+                    <p className="text-[3vh] p-3 w-[10vw] overflow-y-hidden overflow-x-auto">{reservation.phone_number}</p>
                   </td>
                   <td className="p-3 text-sm text-primary  whitespace-nowrap">
-                    <p className="text-[3vh] p-3">{reservation.service}</p>
+                    <p className="text-[3vh] p-3 w-[10vw] overflow-y-hidden overflow-x-auto">{reservation.branch}</p>
                   </td>
                   <td className="p-3 text-sm text-primary  whitespace-nowrap">
-                    <p className="text-[3vh] p-3">{`${(new Date(reservation.datetime)).getFullYear()}/${(new Date(reservation.datetime)).getMonth()}/${(new Date(reservation.datetime)).getDate()}`}</p>
+                    <p className="text-[3vh] p-3 w-[10vw] overflow-y-hidden overflow-x-auto">{reservation.service}</p>
                   </td>
                   <td className="p-3 text-sm text-primary  whitespace-nowrap">
-                    <p className="text-[3vh] p-3">{`${(new Date(reservation.datetime)).getHours()}:${(new Date(reservation.datetime)).getMinutes().toString().length === 1 ? `0${(new Date(reservation.datetime)).getMinutes()}` : (new Date(reservation.datetime)).getMinutes()}`}</p>
+                    <p className="text-[3vh] p-3 w-[10vw] overflow-y-hidden overflow-x-auto">{`${(new Date(reservation.datetime)).getFullYear()}/${(new Date(reservation.datetime)).getMonth()}/${(new Date(reservation.datetime)).getDate()}`}</p>
+                  </td>
+                  <td className="p-3 text-sm text-primary  whitespace-nowrap">
+                    <p className="text-[3vh] p-3 w-[10vw] overflow-y-hidden overflow-x-auto">{`${(new Date(reservation.datetime)).getHours()}:${(new Date(reservation.datetime)).getMinutes().toString().length === 1 ? `0${(new Date(reservation.datetime)).getMinutes()}` : (new Date(reservation.datetime)).getMinutes()}`}</p>
                   </td>
                 </tr>
                 ))}
@@ -275,20 +268,21 @@ export default function Reservation() {
             </table>
           </div>
       
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden w-full">
             {recentReservations.map((reservation: ReservationEntry) => (
-              <div key={`${reservation.name}-${reservation.phone_number}-${reservation.service}-${reservation.datetime}`} className="w-[30vw] bg-accent space-y-3 p-4 rounded-lg shadow">
+              <div key={`${reservation.name}-${reservation.phone_number}-${reservation.service}-${reservation.datetime}`} className="bg-accent space-y-3 mx-2 p-4 rounded-lg shadow w-[80vw] sm:w-[40vw]">
                 <div className="flex justify-between items-center space-x-2 text-sm">
-                  <div>
-                    <div className="text-primary font-bold hover:underline">{reservation.name}</div>
-                  </div>
-                  <div className="text-gray-500">{`${(new Date(reservation.datetime)).getDate()}/${(new Date(reservation.datetime)).getMonth()}/${(new Date(reservation.datetime)).getFullYear()}`}</div>
                 </div>
-                <div className="text-sm text-primary font-emibold">
+                <div className="text-primary font-bold hover:underline w-[80vw] sm:w-[35vw] overflow-y-hidden overflow-x-auto">{reservation.name}</div>
+                <div className="text-gray-500 overflow-y-hidden overflow-x-auto">{`${(new Date(reservation.datetime)).getDate()}/${(new Date(reservation.datetime)).getMonth()}/${(new Date(reservation.datetime)).getFullYear()}`}</div>
+                <div className="text-sm text-primary font-emibold overflow-y-hidden overflow-x-auto">
                   {reservation.service}
                 </div>
-                <div className="text-sm font-medium text-black">
+                <div className="text-sm font-medium text-black overflow-y-hidden overflow-x-auto">
                   {`${(new Date(reservation.datetime)).getHours()}:${(new Date(reservation.datetime)).getMinutes().toString().length === 1 ? `0${(new Date(reservation.datetime)).getMinutes()}` : (new Date(reservation.datetime)).getMinutes()}`}
+                </div>
+                <div className="text-sm text-primary font-emibold overflow-y-hidden overflow-x-auto">
+                  {reservation.branch}
                 </div>
               </div>
             ))}
