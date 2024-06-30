@@ -1,4 +1,5 @@
 export interface BranchServices {
+    // branch_name will be Document ID
     service_name: string,
     is_available: boolean
 }

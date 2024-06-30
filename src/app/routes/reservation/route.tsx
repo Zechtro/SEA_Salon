@@ -6,8 +6,15 @@ import { addReservation } from "../../utils/reservation.server";
 import { dropDownEntry } from "./interface";
 import { validate } from "./validate";
 import { getUserSession } from "../../utils/session.server";
-import { Table_Service, getTableCustomerReservation } from "../../utils/db.server";
+import { Table_Branch, Table_Service, getTableBranchServices, getTableCustomerReservation } from "../../utils/db.server";
 import { isUserAdmin } from "../../utils/user.server";
+import { BranchInfo } from "../../models/branch";
+import { BranchServices } from "../../models/branch_services";
+import { useState } from "react";
+
+interface BranchServiceMap {
+  [key: string]: string[];
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const sessionUser = await getUserSession(request);
@@ -31,6 +38,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     )
   } catch (error) {
     console.error("Error fetching services:", error);
+    return redirect("/reservation")
   }
 
   let reservations: ReservationEntry[]
@@ -44,9 +52,48 @@ export async function loader({ request }: LoaderFunctionArgs) {
     })).sort((a, b) => b.datetime.localeCompare(a.datetime))
   } catch (error) {
     reservations = []
+    return redirect("/reservation")
   }
 
-  return json({ dropDownServices: dropDownServices, recentReservations: reservations });
+  let branches: BranchInfo[]
+  try{
+    branches = (await Table_Branch.get()).docs.map(doc => ({
+      branch_name: doc.data().branch_name,
+      location: doc.data().location,
+      open_time: doc.data().open_time,
+      close_time: doc.data().close_time
+    }))
+  }catch(error){
+    console.log(error)
+    return redirect("/reservation")
+  }
+
+  const mapBranchServices: BranchServiceMap = {}
+  try{
+    for (const branch of branches){
+      const branchServices: BranchServices[] = (await getTableBranchServices(branch.branch_name).get()).docs.map(doc => ({
+        service_name: doc.data().service_name,
+        is_available: doc.data().is_available
+      }))
+
+      for (const branchService of branchServices){
+        const is_available = branchService.is_available
+        if(is_available){
+          if (!(branch.branch_name in mapBranchServices)) {
+            console.log(!(branch.branch_name in mapBranchServices))
+            mapBranchServices[branch.branch_name] = []
+          }
+          mapBranchServices[branch.branch_name].push(branchService.service_name)
+        }
+        console.log(mapBranchServices)
+      }
+    }
+  }catch(error){
+    console.log(error)
+    return redirect("/reservation")
+  }
+
+  return json({ mapBranchServices: mapBranchServices, branches: branches, dropDownServices: dropDownServices, recentReservations: reservations });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -77,19 +124,25 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Reservation() {
-  const {dropDownServices, recentReservations} = useLoaderData<{dropDownServices: dropDownEntry[], recentReservations: ReservationEntry[]}>();
+  const loaderData = useLoaderData<typeof loader>()
+  // const branches = loaderData.branches
+  const dropDownServices = loaderData.dropDownServices
+  const recentReservations = loaderData.recentReservations
+  const mapBranchServices = loaderData.mapBranchServices
   const actionData = useActionData<typeof action>()
   const invalidName = actionData?.error?.invalidName
   const invalidPhoneNumber = actionData?.error?.invalidPhoneNumber
   const invalidDatetime = actionData?.error?.invalidDatetime
   const successMessage = actionData?.success
 
+  const [selectedBranch, setSelectedBranch] = useState<string>('')
+
   return (
     <div className="font-sans flex flex-col items-center">
       <h1 className="h1 mt-[5vh]">Reservation</h1>
       {/* Reservation Form Section */}
       <section>
-        <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[80vw] sm:w-[50vw] sm:h-[70vh] lg:h-[60vh] rounded-lg border-4 border-accent">
+        <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[80vw] sm:w-[50vw] sm:h-[85vh] rounded-lg border-4 border-accent">
           <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
             <label htmlFor="name" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Name</label>
             <div className="w-[40vw] sm:w-[30vw]">
@@ -126,22 +179,38 @@ export default function Reservation() {
             </div>
           </div>
           <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
-            <label htmlFor="service" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Service</label>
+            <label htmlFor="branch" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Branch</label>
             <select
-              name="service"
+              name="branch"
               required
-              className="sm:w-[30vw] w-[40vw] h-[3vh] sm:h-[5vh] text-[1.1vh] sm:text-[3vh] rounded-lg border-2 border-accent p-2"
+              onChange={(e) => setSelectedBranch(e.target.value as string)}
+              className="sm:w-[30vw] w-[40vw] h-[3vh] sm:h-[6vh] text-[1.1vh] sm:text-[2.1vh] rounded-lg border-2 border-accent p-2"
             >
-              <option value="">Choose Service</option>
-              {dropDownServices.map((option: dropDownEntry) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+              <option value="">Choose Branch</option>
+              {Object.entries(mapBranchServices).map(([branchName]) => (
+                <option key={branchName} value={branchName}>
+                  {branchName}
                 </option>
               ))}
             </select>
           </div>
           <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
-            <label htmlFor="datetime" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh">Date and Time</label>
+            <label htmlFor="service" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Service</label>
+            <select
+              name="service"
+              required
+              className="sm:w-[30vw] w-[40vw] h-[3vh] sm:h-[6vh] text-[1.1vh] sm:text-[2.1vh] rounded-lg border-2 border-accent p-2"
+            >
+              <option value="">Choose Service</option>
+              {mapBranchServices[selectedBranch]?.map((service_name) => (
+                <option key={service_name} value={service_name}>
+                  {service_name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
+            <label htmlFor="datetime" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Date and Time</label>
             <div className="w-[40vw] lg:w-[30vw]"> 
               <input
                 name="datetime"
