@@ -40,11 +40,13 @@ https://sea-salon-seven.vercel.app/
 - Reviews sorted by rating
 - Review Form
 - Reservation Page
-- Reservation Form
+- Reservation Form -- Integrated with each branch
 - Reservation list sorted by latest date
 - User Authentication (Sign Up/Login/Logout)
 - Profile Page
-- Service Form
+- Add Service Form
+- Add Branch Form
+- Responsive
 
 
 ## Screenshots
@@ -142,6 +144,8 @@ Project is: _on-progress_.
 ## Room for Improvement
 - Scrollreveal
 - Reservation list pagination
+- Reservation schedule integration
+- Show/hide password field
 
 
 ## Contributor

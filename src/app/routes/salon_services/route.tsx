@@ -1,10 +1,11 @@
-import { Form, redirect, useActionData } from "@remix-run/react";
+import { Form, redirect, useActionData, useLoaderData } from "@remix-run/react";
 import { Button } from "../../components/Button";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { getUserSession } from "../../utils/session.server";
 import { isUserAdmin } from "../../utils/user.server";
 import { ServiceInfo, createService } from "../../models/service";
 import { addService } from "../../utils/service.server";
+import { Table_Service } from "../../utils/db.server";
 
 export interface dropDownEntry {
     label: string,
@@ -32,7 +33,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
     if(!isAdmin){
         return redirect("/")
     }
-    return null
+
+    let services: ServiceInfo[] = []
+    try {
+      services = (await Table_Service.get()).docs.map(doc => ({
+        service_name: doc.data().service_name,
+        duration: doc.data().duration,
+        image_path: doc.data().image_path
+      }))
+    }catch(error){
+      return null
+    }
+    return ({services: services})
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -56,11 +68,13 @@ export default function Salon_services() {
     const actionData = useActionData<typeof action>()
     const invalidServiceName = actionData?.error
     const successMessage = actionData?.success
+    const loaderData = useLoaderData<typeof loader>()
+    const services: ServiceInfo[] = loaderData?.services
 
     return (
         <div className="font-sans flex flex-col items-center">
           <h1 className="h1 mt-[5vh]">Add Service</h1>
-          <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[50vw] h-[40vh] rounded-lg border-4 border-accent">
+          <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[70vw] lg:w-[50vw] h-[40vh] rounded-lg border-4 border-accent">
             <div className="flex sm:flex-col lg:flex-row justify-around">
               <label htmlFor="service_name" className="sm:w-[30vw] lg:w-[15vw] text-[3vh]">Service Name</label>
               <div className="w-[30vw]"> 
@@ -102,6 +116,55 @@ export default function Salon_services() {
               Add
             </Button>
           </Form >
+
+          {/* All Services List Section */}
+          <section className="flex flex-col items-center mt-[8vh] w-full">
+            <h2 className="h2 flex justify-center">All Services</h2>
+            <div className="flex w-[90vw] lg:w-[75vw] flex-col items-center mt-[3vh]">
+              <div className="overflow-auto rounded-lg shadow block w-full">
+                <table className="w-full">
+                  <thead className="bg-accent border-b-2 border-accent">
+                  <tr>
+                    <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Service Name</th>
+                    <th className="w-[15vw] p-3 text-[3.5vh] font-semibold tracking-wide text-center text-white">Duration</th>
+                  </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {services.map((service: ServiceInfo) => (
+                    <tr key={`${service.service_name}`} className="bg-gray-100">
+                      <td className="p-3 text-sm text-primary whitespace-nowrap">
+                        <p className="text-[3vh] p-3 w-[35vw] overflow-y-hidden overflow-x-auto">{service.service_name}</p>
+                      </td>
+                      <td className="p-3 text-sm text-primary  whitespace-nowrap">
+                        <p className="text-[3vh] p-3 w-[35vw] overflow-y-hidden overflow-x-auto">{service.duration} Minute</p>
+                      </td>
+                    </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+          
+              {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden w-full">
+                {services.map((service: ServiceInfo) => (
+                  <div key={`${service.name}`} className="bg-accent space-y-3 mx-2 p-4 rounded-lg shadow w-[80vw] sm:w-[40vw]">
+                    <div className="text-primary font-bold w-[75vw] sm:w-[35vw] overflow-y-hidden overflow-x-auto">{service.name}</div>
+                    <div className="text-gray-500 overflow-y-hidden overflow-x-auto">{`${(new Date(service.datetime)).getDate()}/${(new Date(service.datetime)).getMonth()}/${(new Date(service.datetime)).getFullYear()}`}</div>
+                    <div className="text-sm text-primary font-emibold overflow-y-hidden overflow-x-auto">
+                      {`${(new Date(service.datetime)).getHours()}:${(new Date(service.datetime)).getMinutes().toString().length === 1 ? `0${(new Date(service.datetime)).getMinutes()}` : (new Date(service.datetime)).getMinutes()}`}
+                    </div>
+                    <div className="text-sm font-medium text-black overflow-y-hidden overflow-x-auto">
+                      {service.service}
+                    </div>
+                    <div className="text-sm text-primary font-emibold overflow-y-hidden overflow-x-auto">
+                      {service.branch}
+                    </div>
+                  </div>
+                ))}
+
+              </div> */}
+            </div>
+
+          </section>
         </div>
       )
   }

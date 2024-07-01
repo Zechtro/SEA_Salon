@@ -58,7 +58,7 @@ export default function Index() {
     <div className="font-sans">
 
       {/* HERO SECTION */}
-      <section className="hero h-[640px] xl:h-[840px] bg-hero sm:bg-bottom lg:bg-center lg:bg-cover bg-no-repeat bg-fixed sm:rounded-bl-[150px]  xl:rounded-bl-[290px] relative z-20">
+      <section className="hero h-[640px] xl:h-[840px] bg-hero sm:bg-bottom lg:bg-center lg:bg-cover bg-no-repeat bg-fixed rounded-bl-[90px] sm:rounded-bl-[150px]  xl:rounded-bl-[290px] relative z-20">
         <div className="container mx-auto h-full flex items-center justify-center xl:justify-start">
           <div className="hero__text w-[567px] flex flex-col items-center text-center xl:text-left lg:items-start">
             <h1 className="h1 mb-8">{SalonSlogan}</h1>

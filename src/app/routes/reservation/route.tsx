@@ -131,7 +131,7 @@ export default function Reservation() {
       <h1 className="h1 mt-[5vh]">Reservation</h1>
       {/* Reservation Form Section */}
       <section>
-        <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[80vw] sm:w-[50vw] sm:h-[85vh] rounded-lg border-4 border-accent">
+        <Form method="post" className="flex flex-col justify-around items-center mt-[5vh] w-[80vw] sm:w-[50vw] h-[90vh] sm:h-[85vh] rounded-lg border-4 border-accent">
           <div className="flex flex-col lg:flex-row justify-between w-full p-4 items-center lg:p-4">
             <label htmlFor="name" className="sm:w-[30vw] lg:w-[15vw] text-[2vh] sm:text-[3vh]">Name</label>
             <div className="w-[40vw] sm:w-[30vw]">
@@ -173,7 +173,7 @@ export default function Reservation() {
               name="branch"
               required
               onChange={(e) => setSelectedBranch(e.target.value as string)}
-              className="sm:w-[30vw] w-[40vw] h-[3vh] sm:h-[6vh] text-[1.1vh] sm:text-[2.1vh] rounded-lg border-2 border-accent p-2"
+              className="sm:w-[30vw] w-[40vw] h-[5vh] sm:h-[6vh] text-[1.1vh] sm:text-[2.1vh] rounded-lg border-2 border-accent p-2"
             >
               <option value="">Choose Branch</option>
               {Object.entries(mapBranchServices).map(([branchName]) => (
@@ -188,7 +188,7 @@ export default function Reservation() {
             <select
               name="service"
               required
-              className="sm:w-[30vw] w-[40vw] h-[3vh] sm:h-[6vh] text-[1.1vh] sm:text-[2.1vh] rounded-lg border-2 border-accent p-2"
+              className="sm:w-[30vw] w-[40vw] h-[5vh] sm:h-[6vh] text-[1.1vh] sm:text-[2.1vh] rounded-lg border-2 border-accent p-2"
             >
               <option value="">Choose Service</option>
               {mapBranchServices[selectedBranch]?.map((service_name) => (
@@ -227,7 +227,7 @@ export default function Reservation() {
 
       {/* Recent Reservations List Section */}
       <section className="flex flex-col items-center mt-[8vh] w-full">
-        <h2 className="h2">Recent Reservations</h2>
+        <h2 className="h2 flex justify-center">Recent Reservations</h2>
         <div className="flex w-[90vw] lg:w-[75vw] flex-col items-center mt-[3vh]">
           <div className="overflow-auto rounded-lg shadow hidden lg:block w-full">
             <table className="w-full">
@@ -271,15 +271,13 @@ export default function Reservation() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden w-full">
             {recentReservations.map((reservation: ReservationEntry) => (
               <div key={`${reservation.name}-${reservation.phone_number}-${reservation.service}-${reservation.datetime}`} className="bg-accent space-y-3 mx-2 p-4 rounded-lg shadow w-[80vw] sm:w-[40vw]">
-                <div className="flex justify-between items-center space-x-2 text-sm">
-                </div>
-                <div className="text-primary font-bold hover:underline w-[80vw] sm:w-[35vw] overflow-y-hidden overflow-x-auto">{reservation.name}</div>
+                <div className="text-primary font-bold w-[75vw] sm:w-[35vw] overflow-y-hidden overflow-x-auto">{reservation.name}</div>
                 <div className="text-gray-500 overflow-y-hidden overflow-x-auto">{`${(new Date(reservation.datetime)).getDate()}/${(new Date(reservation.datetime)).getMonth()}/${(new Date(reservation.datetime)).getFullYear()}`}</div>
                 <div className="text-sm text-primary font-emibold overflow-y-hidden overflow-x-auto">
-                  {reservation.service}
+                  {`${(new Date(reservation.datetime)).getHours()}:${(new Date(reservation.datetime)).getMinutes().toString().length === 1 ? `0${(new Date(reservation.datetime)).getMinutes()}` : (new Date(reservation.datetime)).getMinutes()}`}
                 </div>
                 <div className="text-sm font-medium text-black overflow-y-hidden overflow-x-auto">
-                  {`${(new Date(reservation.datetime)).getHours()}:${(new Date(reservation.datetime)).getMinutes().toString().length === 1 ? `0${(new Date(reservation.datetime)).getMinutes()}` : (new Date(reservation.datetime)).getMinutes()}`}
+                  {reservation.service}
                 </div>
                 <div className="text-sm text-primary font-emibold overflow-y-hidden overflow-x-auto">
                   {reservation.branch}
