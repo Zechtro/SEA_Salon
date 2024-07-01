@@ -4,7 +4,6 @@ export interface error {
     invalidDatetime?: string,
 }
 
-export interface dropDownEntry {
-    label: string,
-    value: string
+export interface BranchServiceMap {
+    [key: string]: string[];
 }
