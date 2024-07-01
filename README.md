@@ -53,59 +53,75 @@ https://sea-salon-seven.vercel.app/
 
 ### Desktop - Home Page
 
-![Example screenshot](./Screenshots/Level4-HomePage-Desktop.png)
+![Example screenshot](./Screenshots/Level5-HomePage-Desktop.png)
 
 ### Desktop - Sign Up
 
-![Example screenshot](./Screenshots/Level4-SignUp-Desktop.png)
+![Example screenshot](./Screenshots/Level5-SignUp-Desktop.png)
 
 ### Desktop - Login
 
-![Example screenshot](./Screenshots/Level4-Login-Desktop.png)
+![Example screenshot](./Screenshots/Level5-Login-Desktop.png)
 
 ### Desktop - Profile
 
-![Example screenshot](./Screenshots/Level4-Profile-Desktop.png)
+![Example screenshot](./Screenshots/Level5-Profile-Desktop.png)
 
 ### Desktop - Service
 
-![Example screenshot](./Screenshots/Level4-Service-Desktop.png)
+![Example screenshot](./Screenshots/Level5-Service-Desktop.png)
+
+### Desktop - Branch
+
+![Example screenshot](./Screenshots/Level5-Branch-Desktop.png)
+
+### Desktop - Branch Details
+
+![Example screenshot](./Screenshots/Level5-BranchInfo-Desktop.png)
 
 ### Desktop - Reservation
 
-![Example screenshot](./Screenshots/Level4-Reservation-Desktop.png)
+![Example screenshot](./Screenshots/Level5-Reservation-Desktop.png)
 
 ### Desktop - Review
 
-![Example screenshot](./Screenshots/Level4-Review-Desktop.png)
+![Example screenshot](./Screenshots/Level5-Review-Desktop.png)
 
 ### Mobile - Home Page
 
-![Example screenshot](./Screenshots/Level4-HomePage-Mobile.png)
+![Example screenshot](./Screenshots/Level5-HomePage-Mobile.png)
 
 ### Mobile - SignUp
 
-![Example screenshot](./Screenshots/Level4-SignUp-Mobile.png)
+![Example screenshot](./Screenshots/Level5-SignUp-Mobile.png)
 
 ### Mobile - Login
 
-![Example screenshot](./Screenshots/Level4-Login-Mobile.png)
+![Example screenshot](./Screenshots/Level5-Login-Mobile.png)
 
 ### Mobile - Profile
 
-![Example screenshot](./Screenshots/Level4-Profile-Mobile.png)
+![Example screenshot](./Screenshots/Level5-Profile-Mobile.png)
 
 ### Mobile - Service
 
-![Example screenshot](./Screenshots/Level4-Service-Mobile.png)
+![Example screenshot](./Screenshots/Level5-Service-Mobile.png)
+
+### Mobile - Branch
+
+![Example screenshot](./Screenshots/Level5-Branch-Mobile.png)
+
+### Mobile - Branch Details
+
+![Example screenshot](./Screenshots/Level5-BranchInfo-Mobile.png)
 
 ### Mobile - Reservation
 
-![Example screenshot](./Screenshots/Level4-Reservation-Mobile.png)
+![Example screenshot](./Screenshots/Level5-Reservation-Mobile.png)
 
 ### Mobile - Review
 
-![Example screenshot](./Screenshots/Level4-Review-Mobile.png)
+![Example screenshot](./Screenshots/Level5-Review-Mobile.png)
 
 
 ## Setup
@@ -135,17 +151,23 @@ These steps assume that you have installed Node.js already
 5. See Reservation(s).
 6. Sign Up/Login/Logout
 7. Add Service(s).
+8. See Service(s).
+9. Add Branch(es).
+10. See Branch(es).
+11. Assign Service(s) into Branch(es).
 
 
 ## Project Status
-Project is: _on-progress_.
+Project is: _finished_.
 
 
 ## Room for Improvement
-- Scrollreveal
-- Reservation list pagination
-- Reservation schedule integration
-- Show/hide password field
+- Scrollreveal.
+- Reservation list pagination.
+- Reservation schedule integration.
+- Show/hide password field.
+- Improved UI for mobile.
+- Upload image for Service's image.
 
 
 ## Contributor
