@@ -168,6 +168,8 @@ Project is: _finished_.
 - Show/hide password field.
 - Improved UI for mobile.
 - Upload image for Service's image.
+- Loading notification/animations.
+- On Failure/Success advanced notification Form submission.
 
 
 ## Contributor
